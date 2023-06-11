@@ -40,6 +40,9 @@ dependencies {
 
             project(':feature:items-api'),
             project(':feature:items-impl'),
+            project(':feature:create-api'),
+            project(':feature:create-impl'),
+
 
             deps.androidx.appcompat,
             deps.dagger.dagger,

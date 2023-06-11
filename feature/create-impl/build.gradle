@@ -1,0 +1,25 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+apply from: "$rootDir/common.gradle"
+
+android {
+    namespace 'com.bor96dev.yandextodoapp.core.feature.create_api'
+}
+
+dependencies {
+
+    implementation(
+            project(':core:di'),
+            project(':feature:create-api'),
+
+            deps.androidx.appcompat,
+            deps.dagger.dagger,
+    )
+
+    kapt(
+            deps.dagger.compiler
+    )
+}
