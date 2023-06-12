@@ -1,0 +1,26 @@
+/* Dependencies versions */
+
+def versions = [:]
+
+versions.appcompat = '1.6.1'
+
+versions.dagger = '2.44.2'
+
+versions.lifecycle = '2.6.0'
+
+/* Dependencies */
+
+ext.deps = [:]
+
+def androidx = [:]
+androidx.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
+deps.androidx = androidx
+
+def dagger = [:]
+dagger.dagger = "com.google.dagger:dagger:$versions.dagger"
+dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+deps.dagger = dagger
+
+def lifecycle = [:]
+lifecycle.viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
+deps.lifecycle = lifecycle

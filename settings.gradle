@@ -14,3 +14,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "YandexTodoApp"
 include ':app'
+include ':core:di'
+include ':feature:items-api'
+include ':feature:items-impl'
+include ':feature:create-api'
+include ':feature:create-impl'
