@@ -15,6 +15,5 @@ internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteract
         list.add(item)
         todoItems.emit(list)
     }
-
     override fun getItems(): Flow<List<TodoItem>> = todoItems
 }
