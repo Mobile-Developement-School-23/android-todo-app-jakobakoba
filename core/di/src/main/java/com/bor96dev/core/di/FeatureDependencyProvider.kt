@@ -10,7 +10,7 @@ interface FeatureDependencyProvider {
 fun Fragment.findFeatureDependencyProvider(): FeatureDependencyProvider {
     var dependencyProvider: Fragment? = parentFragment
 
-    while (parentFragment !is FeatureDependencyProvider || parentFragment != null) {
+    while (parentFragment !is FeatureDependencyProvider && parentFragment != null) {
         dependencyProvider = parentFragment
     }
 

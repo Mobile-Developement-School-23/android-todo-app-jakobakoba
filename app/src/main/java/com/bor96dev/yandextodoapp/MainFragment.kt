@@ -6,14 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.bor96dev.feature.create_api.CreateApi
+import com.bor96dev.core.di.FeatureDependency
+import com.bor96dev.core.di.FeatureDependencyProvider
+import com.bor96dev.feature.items_api.ItemsApi
 import com.bor96dev.yandextodoapp.di.DaggerMainComponent
 import javax.inject.Inject
 
-internal class MainFragment : Fragment() {
+internal class MainFragment : Fragment(), FeatureDependencyProvider {
 
     @Inject
-    lateinit var createApi: CreateApi
+    lateinit var itemsApi: ItemsApi
+
+    // TODO перенести на viewmodel
+    private val component = DaggerMainComponent.create()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,7 +29,7 @@ internal class MainFragment : Fragment() {
     }
 
     override fun onAttach(context: Context) {
-        DaggerMainComponent.create().inject(this)
+        component.inject(this)
         super.onAttach(context)
     }
 
@@ -32,8 +37,10 @@ internal class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (childFragmentManager.fragments.isEmpty()) {
             childFragmentManager.beginTransaction()
-                .add(R.id.fragmentMain, createApi.getFragment())
-                .commit()
+                .replace(R.id.fragmentMain, itemsApi.getFragment())
+                .commitNow()
         }
     }
+
+    override fun featureDependency(): FeatureDependency = component
 }

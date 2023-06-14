@@ -25,13 +25,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '11'
     }
-
 }
 
 dependencies {
@@ -47,16 +46,11 @@ dependencies {
 
 
             deps.androidx.appcompat,
+            deps.androidx.material,
             deps.dagger.dagger,
     )
 
     kapt(
             deps.dagger.compiler
     )
-
-
-//    implementation 'androidx.core:core-ktx:1.8.0'
-
-    implementation 'com.google.android.material:material:1.5.0'
-//    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

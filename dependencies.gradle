@@ -4,6 +4,8 @@ def versions = [:]
 
 versions.appcompat = '1.6.1'
 
+versions.material = '1.5.0'
+
 versions.dagger = '2.44.2'
 
 versions.lifecycle = '2.6.0'
@@ -13,6 +15,7 @@ versions.lifecycle = '2.6.0'
 ext.deps = [:]
 
 def androidx = [:]
+androidx.material = "com.google.android.material:material:$versions.material"
 androidx.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
 deps.androidx = androidx
 
