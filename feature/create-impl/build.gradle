@@ -7,6 +7,10 @@ apply from: "$rootDir/common.gradle"
 
 android {
     namespace 'com.bor96dev.yandextodoapp.core.feature.create_impl'
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {

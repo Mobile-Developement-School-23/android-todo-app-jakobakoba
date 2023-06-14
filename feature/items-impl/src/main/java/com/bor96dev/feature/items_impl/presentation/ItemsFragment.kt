@@ -2,35 +2,61 @@ package com.bor96dev.feature.items_impl.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bor96dev.core.di.coreDependenciesProvider
+import com.bor96dev.core.di.daggerViewModels
 import com.bor96dev.core.di.findFeatureDependencyProvider
+import com.bor96dev.core.di.viewBinding
 import com.bor96dev.feature.items_impl.di.DaggerItemsComponent
 import com.bor96dev.feature.items_impl.presentation.adapter.ItemsAdapter
+import com.bor96dev.feature.items_impl.presentation.model.toUI
 import com.bor96dev.yandextodoapp.core.feature.items_impl.R
+import com.bor96dev.yandextodoapp.core.feature.items_impl.databinding.ItemsFragmentBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Provider
 
-internal class ItemsFragment : Fragment() {
+internal class ItemsFragment : Fragment(R.layout.items_fragment) {
 
-    // TODO binding
-    private val viewModel: ItemsViewModel by viewModels()
+    private val binding by viewBinding(ItemsFragmentBinding::bind)
 
-    private val adaper: ItemsAdapter by lazy { ItemsAdapter() }
+    @Inject
+    lateinit var viewModelProvider: Provider<ItemsViewModel>
+
+    private val viewModel: ItemsViewModel by daggerViewModels { viewModelProvider.get() }
+
+    private val itemsAdapter: ItemsAdapter by lazy { ItemsAdapter() }
 
     override fun onAttach(context: Context) {
         DaggerItemsComponent.factory()
-            .create(findFeatureDependencyProvider())
+            .create(
+                coreDependenciesProvider(),
+                findFeatureDependencyProvider()
+            )
             .inject(this)
         super.onAttach(context)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.items_fragment, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding) {
+            addButton.setOnClickListener {
+                viewModel.onAddButtonClicked()
+            }
+            recycler.apply {
+                adapter = itemsAdapter
+                layoutManager = LinearLayoutManager(requireContext())
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.state.collectLatest { list ->
+                itemsAdapter.submitList(list.map { it.toUI() })
+            }
+        }
     }
 }

@@ -7,6 +7,10 @@ apply from: "$rootDir/common.gradle"
 
 android {
     namespace 'com.bor96dev.yandextodoapp.core.feature.items_impl'
+
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -20,6 +24,7 @@ dependencies {
             deps.androidx.material,
             deps.androidx.fragment_ktx,
             deps.dagger.dagger,
+            deps.coroutines.coroutines,
     )
 
     kapt(

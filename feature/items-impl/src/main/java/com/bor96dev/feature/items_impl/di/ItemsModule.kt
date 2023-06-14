@@ -1,5 +1,6 @@
 package com.bor96dev.feature.items_impl.di
 
+import com.bor96dev.core.di.FeatureDependency
 import com.bor96dev.core.di.FeatureDependencyProvider
 import com.bor96dev.core.di.PerFeature
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.TodoItemsApiProvider
@@ -13,7 +14,7 @@ internal class ItemsModule {
     @PerFeature
     @Provides
     fun provideTodoItemsInteractor(
-        featureProvider: FeatureDependencyProvider
+        featureProvider: FeatureDependency
     ): TodoItemsInteractor {
         return (featureProvider as TodoItemsApiProvider).todoItemsApi().todoItemsInteractor()
     }

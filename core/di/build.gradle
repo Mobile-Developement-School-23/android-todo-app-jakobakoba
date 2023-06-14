@@ -7,6 +7,10 @@ apply from: "$rootDir/common.gradle"
 
 android {
     namespace 'com.bor96dev.yandextodoapp.core.di'
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -15,6 +19,7 @@ dependencies {
             deps.androidx.appcompat,
             deps.dagger.dagger,
     )
+    implementation 'androidx.databinding:viewbinding:7.1.2'
 
     kapt(
             deps.dagger.compiler

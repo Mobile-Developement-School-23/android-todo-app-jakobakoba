@@ -48,6 +48,7 @@ dependencies {
 
             deps.androidx.appcompat,
             deps.androidx.material,
+            deps.coroutines.coroutines,
             deps.dagger.dagger,
     )
 
