@@ -8,6 +8,8 @@ versions.material = '1.5.0'
 
 versions.coroutines = '1.6.4'
 
+versions.cicerone = '7.1'
+
 versions.core_ktx = '1.8.0'
 versions.fragment_ktx = "1.5.7"
 
@@ -26,6 +28,10 @@ androidx.core_ktx = "androidx.core:core-ktx:$versions.core_ktx"
 androidx.fragment_ktx = "androidx.fragment:fragment-ktx:$versions.fragment_ktx"
 
 deps.androidx = androidx
+
+def cicerone = [:]
+cicerone.cicerone = "com.github.terrakok:cicerone:$versions.cicerone"
+deps.cicerone = cicerone
 
 def coroutines = [:]
 coroutines.coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"

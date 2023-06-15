@@ -17,6 +17,7 @@ dependencies {
 
     implementation(
             project(':core:di'),
+            project(':feature:create-api'),
             project(':feature:items-api'),
             project(':feature:todo-items-api'),
 
@@ -24,6 +25,7 @@ dependencies {
             deps.androidx.material,
             deps.androidx.fragment_ktx,
             deps.dagger.dagger,
+            deps.cicerone.cicerone,
             deps.coroutines.coroutines,
     )
 

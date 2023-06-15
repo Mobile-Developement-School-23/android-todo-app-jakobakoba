@@ -18,6 +18,7 @@ dependencies {
     implementation(
             deps.androidx.appcompat,
             deps.dagger.dagger,
+            deps.cicerone.cicerone,
     )
     implementation 'androidx.databinding:viewbinding:7.1.2'
 

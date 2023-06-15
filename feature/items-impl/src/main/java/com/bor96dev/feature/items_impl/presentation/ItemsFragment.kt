@@ -6,10 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bor96dev.core.di.coreDependenciesProvider
-import com.bor96dev.core.di.daggerViewModels
-import com.bor96dev.core.di.findFeatureDependencyProvider
-import com.bor96dev.core.di.viewBinding
+import com.bor96dev.core.di.*
 import com.bor96dev.feature.items_impl.di.DaggerItemsComponent
 import com.bor96dev.feature.items_impl.presentation.adapter.ItemsAdapter
 import com.bor96dev.feature.items_impl.presentation.model.toUI
@@ -34,8 +31,8 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
     override fun onAttach(context: Context) {
         DaggerItemsComponent.factory()
             .create(
-                coreDependenciesProvider(),
-                findFeatureDependencyProvider()
+                requireContext().findCoreDependencies(),
+                requireContext().findFeatureDependencyProvider()
             )
             .inject(this)
         super.onAttach(context)
