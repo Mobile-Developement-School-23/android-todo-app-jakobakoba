@@ -40,10 +40,18 @@ internal class ItemsViewModel @Inject constructor(
             override fun createFragment(factory: FragmentFactory): Fragment =
                 createApi.getFragment()
         })
+    }
 
-//        viewModelScope.launch {
-//            val id = Random.nextInt(1000).toString()
-//            todoItemsInteractor.addItem(TodoItem(id, "name : $id"))
-//        }
+    fun onItemClicked(id: String) {
+        router.navigateTo(object : FragmentScreen {
+            override fun createFragment(factory: FragmentFactory): Fragment =
+                createApi.getFragment(id)
+        })
+    }
+
+    fun onRadioButtonClicked(id: String, isDone: Boolean) {
+        viewModelScope.launch {
+            todoItemsInteractor.makeIsDone(id, isDone)
+        }
     }
 }

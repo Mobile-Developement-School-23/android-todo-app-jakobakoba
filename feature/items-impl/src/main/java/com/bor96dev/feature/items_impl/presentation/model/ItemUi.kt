@@ -8,13 +8,17 @@ internal data class ItemUi(
     val text: String,
     val priorityDrawableId: Int,
     val isPriorityVisible: Boolean,
+    val isRadioButtonEnabled: Boolean,
+    val isTextLined: Boolean
 )
 
 internal fun TodoItem.toUI(): ItemUi = ItemUi(
     id,
     text,
     priority.getPriorityDrawableResource(),
-    priority.getVisibility()
+    priority.getVisibility(),
+    isDone,
+    isDone
 )
 
 private fun TodoItemPriority.getPriorityDrawableResource(): Int {

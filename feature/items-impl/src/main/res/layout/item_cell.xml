@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <ImageButton
+        <CheckBox
             android:id="@+id/statusIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
             android:backgroundTint="@android:color/transparent"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            android:src="@drawable/not_done_icon"
+            tools:src="@android:drawable/alert_dark_frame"
             android:visibility="gone"
             tools:visibility="visible" />
 

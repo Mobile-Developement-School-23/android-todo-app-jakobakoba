@@ -6,6 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bor96dev.core.di.*
 import com.bor96dev.feature.items_impl.di.DaggerItemsComponent
 import com.bor96dev.feature.items_impl.presentation.adapter.ItemsAdapter
@@ -26,7 +27,12 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
 
     private val viewModel: ItemsViewModel by daggerViewModels { viewModelProvider.get() }
 
-    private val itemsAdapter: ItemsAdapter by lazy { ItemsAdapter() }
+    private val itemsAdapter: ItemsAdapter by lazy {
+        ItemsAdapter(
+            { viewModel.onItemClicked(it) },
+            { id, isDone -> viewModel.onRadioButtonClicked(id, isDone) }
+        )
+    }
 
     override fun onAttach(context: Context) {
         DaggerItemsComponent.factory()
@@ -47,6 +53,20 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
             recycler.apply {
                 adapter = itemsAdapter
                 layoutManager = LinearLayoutManager(requireContext())
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        if (dy > 0 || dy < 0 && addButton.isShown) {
+                            addButton.hide()
+                        }
+                    }
+
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            addButton.show()
+                        }
+                        super.onScrollStateChanged(recyclerView, newState)
+                    }
+                })
             }
         }
 

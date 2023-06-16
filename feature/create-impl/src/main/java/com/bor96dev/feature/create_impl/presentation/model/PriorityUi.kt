@@ -4,5 +4,5 @@ import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemPri
 
 data class PriorityUi(
     val id: TodoItemPriority,
-    val text: String,
+    val textId: Int,
 )

@@ -9,5 +9,11 @@ interface TodoItemsInteractor {
         priority: TodoItemPriority
     )
 
+    suspend fun makeIsDone(id: String, isDone: Boolean)
+
+    fun getItem(id: String): TodoItem
+
+    suspend fun removeItem(id: String)
+
     fun getItems(): Flow<List<TodoItem>>
 }

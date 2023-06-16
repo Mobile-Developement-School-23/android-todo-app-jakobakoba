@@ -22,17 +22,34 @@ internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteract
             TodoItem(
                 System.currentTimeMillis().toString(),
                 text,
-                priority
+                priority,
+                false
             )
         )
         todoItems.emit(list)
+    }
+
+    override suspend fun makeIsDone(id: String, isDone: Boolean) {
+        val list = todoItems.value.toMutableList()
+        val itemPosition = list.indexOfFirst { it.id == id }
+        list[itemPosition] = list[itemPosition].copy(isDone = isDone)
+        todoItems.emit(list)
+    }
+
+    override fun getItem(id: String): TodoItem {
+        return todoItems.value.find { it.id == id }!!
+    }
+
+    override suspend fun removeItem(id: String) {
+        val array = todoItems.value.filter { it.id != id }
+        todoItems.emit(array)
     }
 
     override fun getItems(): Flow<List<TodoItem>> = todoItems
 
     private fun getMockItems(): List<TodoItem> {
         return listOf(
-            TodoItem("1", "1", TodoItemPriority.LOW),
+            TodoItem("1", "1", TodoItemPriority.LOW, false),
         )
     }
 }
