@@ -51,7 +51,6 @@ internal class CreateFragment : Fragment(R.layout.create_fragment) {
             .inject(this)
         super.onAttach(context)
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -70,7 +69,6 @@ internal class CreateFragment : Fragment(R.layout.create_fragment) {
                 setOnClickListener {
                     viewModel.removeItemButtonClicked(todoItemId)
                 }
-
             }
         }
 

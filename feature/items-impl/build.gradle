@@ -12,9 +12,7 @@ android {
         viewBinding true
     }
 }
-
 dependencies {
-
     implementation(
             project(':core:di'),
             project(':core:ui'),

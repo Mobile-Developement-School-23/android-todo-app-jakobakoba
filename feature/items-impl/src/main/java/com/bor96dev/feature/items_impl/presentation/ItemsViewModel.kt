@@ -22,15 +22,18 @@ internal class ItemsViewModel @Inject constructor(
     private val createApi: CreateApi
 ) : ViewModel() {
 
-
     private val _state = MutableStateFlow(emptyList<TodoItem>())
     val state: StateFlow<List<TodoItem>> = _state
 
+    private val _doneItemsCount = MutableStateFlow(0)
+    val doneItemsCount: StateFlow<Int> = _doneItemsCount
+
     init {
         viewModelScope.launch {
-            todoItemsInteractor.getItems().collectLatest {
+            todoItemsInteractor.getItems().collectLatest { it ->
                 Log.d("GTA5", "$it")
                 _state.emit(it)
+                _doneItemsCount.emit(it.count { it.isDone })
             }
         }
     }

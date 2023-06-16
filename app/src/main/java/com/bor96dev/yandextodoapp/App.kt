@@ -20,6 +20,5 @@ internal class App : Application(),
     override fun featureDependencyProvider(): FeatureDependencyProvider = object : FeatureDependencyProvider {
         override fun featureDependency(): FeatureDependency = component
     }
-
     override fun component(): MainComponent = component
 }

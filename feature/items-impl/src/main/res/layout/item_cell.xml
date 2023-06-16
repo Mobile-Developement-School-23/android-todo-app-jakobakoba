@@ -18,31 +18,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="15dp"
+            android:layout_marginStart="15dp"
             android:backgroundTint="@android:color/transparent"
             android:scaleX="1.5"
             android:scaleY="1.5"
+            android:layout_weight="0"
             android:src="@drawable/not_done_icon" />
 
         <ImageView
+            android:layout_weight="0"
             android:id="@+id/priorityIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="15dp"
             android:backgroundTint="@android:color/transparent"
-            android:scaleX="1.5"
-            android:scaleY="1.5"
+            android:contentDescription="@string/priority_content_description"
             tools:src="@android:drawable/alert_dark_frame"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <TextView
+
             android:id="@+id/item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="7"
+            android:ellipsize="end"
+            android:maxLines="3"
             tools:text="Item Text" />
     </LinearLayout>
 

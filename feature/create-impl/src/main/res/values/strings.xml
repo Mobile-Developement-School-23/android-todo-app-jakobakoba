@@ -3,4 +3,8 @@
     <string name="priority_low">Low</string>
     <string name="priority_normal">Normal</string>
     <string name="priority_urgent">Urgent</string>
+    <string name="save_button_string">save</string>
+    <string name="edit_text_hint">what needs to be done…</string>
+    <string name="priority_string">Priority:</string>
+    <string name="delete_button">Delete</string>
 </resources>

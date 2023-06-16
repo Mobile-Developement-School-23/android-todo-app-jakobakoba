@@ -8,7 +8,6 @@ import dagger.Provides
 
 @Module
 internal class TodoItemsModule {
-
     @PerFeature
     @Provides
     fun provideTodoItemsInteractor(impl: TodoItemsInteractorImpl): TodoItemsInteractor = impl

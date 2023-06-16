@@ -34,8 +34,6 @@ android {
 }
 
 dependencies {
-
-
     implementation(
             project(':core:di'),
 
@@ -52,7 +50,6 @@ dependencies {
             deps.cicerone.cicerone,
             deps.dagger.dagger,
     )
-
     kapt(
             deps.dagger.compiler
     )

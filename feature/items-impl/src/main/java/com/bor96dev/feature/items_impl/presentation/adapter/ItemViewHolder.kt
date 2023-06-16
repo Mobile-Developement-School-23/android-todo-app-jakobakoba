@@ -15,7 +15,6 @@ internal class ItemViewHolder(
     private val onRadioButtonClicked: (String, Boolean) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
 
-
     fun bind(item: ItemUi) {
         itemView.findViewById<TextView>(R.id.item_text).apply {
             text = item.text

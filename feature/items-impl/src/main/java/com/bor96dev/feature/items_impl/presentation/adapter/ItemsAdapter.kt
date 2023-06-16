@@ -18,7 +18,6 @@ internal class ItemsAdapter(
             onRadioButtonClicked
         )
     }
-
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(getItem(position))
     }

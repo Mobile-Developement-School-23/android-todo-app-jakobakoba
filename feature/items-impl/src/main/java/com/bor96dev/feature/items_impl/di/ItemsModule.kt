@@ -27,5 +27,4 @@ internal class ItemsModule {
     ): CreateApi {
         return (featureProvider as CreateApiProvider).createApi()
     }
-
 }

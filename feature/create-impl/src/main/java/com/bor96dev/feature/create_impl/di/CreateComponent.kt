@@ -15,7 +15,6 @@ import dagger.Component
 )
 @PerFeature
 internal interface CreateComponent {
-
     @Component.Factory
     interface Builder {
         fun create(
@@ -23,6 +22,5 @@ internal interface CreateComponent {
             featureDependencyProvider: FeatureDependencyProvider
         ): CreateComponent
     }
-
     fun inject(fragment: CreateFragment)
 }

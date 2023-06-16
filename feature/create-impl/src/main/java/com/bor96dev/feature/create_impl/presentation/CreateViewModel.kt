@@ -19,7 +19,6 @@ class CreateViewModel @Inject constructor(
     private val _screenState = MutableSharedFlow<TodoItem>()
     val state: SharedFlow<TodoItem> = _screenState
 
-
     fun recreateScreen(id: String) {
         viewModelScope.launch {
             if (id.isNotEmpty()) {
@@ -28,18 +27,15 @@ class CreateViewModel @Inject constructor(
             }
         }
     }
-
     fun removeItemButtonClicked(id: String) {
         viewModelScope.launch {
             todoItemsInteractor.removeItem(id)
         }
         router.exit()
     }
-
     fun onExitButtonClicked() {
         router.exit()
     }
-
     fun onSaveButtonClicked(
         text: String,
         priority: TodoItemPriority

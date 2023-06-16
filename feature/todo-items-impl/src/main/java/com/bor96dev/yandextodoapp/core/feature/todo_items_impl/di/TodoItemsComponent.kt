@@ -11,10 +11,8 @@ import dagger.Component
 )
 @PerFeature
 internal interface TodoItemsComponent : TodoItemsApi {
-
     @Component.Factory
     interface Builder {
         fun create(): TodoItemsComponent
     }
-
 }

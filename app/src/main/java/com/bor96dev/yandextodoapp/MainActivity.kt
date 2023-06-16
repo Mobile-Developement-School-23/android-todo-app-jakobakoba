@@ -38,18 +38,16 @@ class MainActivity : AppCompatActivity() {
                             override fun createFragment(factory: FragmentFactory): Fragment {
                                 return itemsApi.getFragment()
                             }
-
-                        })
+                        }
+                    )
                 )
             )
         }
     }
-
     override fun onResumeFragments() {
         super.onResumeFragments()
         navigatorHolder.setNavigator(navigator)
     }
-
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()

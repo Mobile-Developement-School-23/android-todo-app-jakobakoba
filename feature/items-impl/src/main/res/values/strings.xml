@@ -2,4 +2,5 @@
 <resources>
     <string name="my_tasks">My Tasks</string>
     <string name="done">Done:</string>
+    <string name="priority_content_description">priority</string>
 </resources>
