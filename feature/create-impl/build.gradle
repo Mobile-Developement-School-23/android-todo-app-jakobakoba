@@ -17,11 +17,14 @@ dependencies {
 
     implementation(
             project(':core:di'),
+            project(':core:ui'),
             project(':feature:create-api'),
 
             deps.androidx.appcompat,
+            deps.cicerone.cicerone,
             deps.dagger.dagger,
     )
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     kapt(
             deps.dagger.compiler

@@ -33,15 +33,12 @@ internal class ItemsViewModel @Inject constructor(
                 _state.emit(it)
             }
         }
-
-
     }
 
     fun onAddButtonClicked() {
         router.navigateTo(object : FragmentScreen {
             override fun createFragment(factory: FragmentFactory): Fragment =
                 createApi.getFragment()
-
         })
 
 //        viewModelScope.launch {

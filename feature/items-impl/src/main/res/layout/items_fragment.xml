@@ -1,24 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/back_light_primary">
+
+    <TextView
+        android:id="@+id/textMyTasks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="70dp"
+        android:background="@color/back_light_primary"
+        android:gravity="left"
+        android:text="@string/my_tasks"
+
+        android:textSize="30sp"
+
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/done"
+        android:textSize="18dp"
+        app:layout_constraintStart_toStartOf="@id/textMyTasks"
+        app:layout_constraintTop_toBottomOf="@id/textMyTasks" />
+
+    <TextView
+        android:id="@+id/textNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@id/textDone"
+        app:layout_constraintTop_toBottomOf="@id/textMyTasks" />
+
+    <Button
+        android:id="@+id/eyes"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/visibility"
+        android:padding="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textMyTasks" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
+        android:background="@color/color_light_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eyes"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:backgroundTint="@color/design_default_color_primary"
-        android:padding="20dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/round_fab"
+        android:padding="25dp"
         android:src="@drawable/add_icon"
-        android:tint="@color/material_dynamic_primary100" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

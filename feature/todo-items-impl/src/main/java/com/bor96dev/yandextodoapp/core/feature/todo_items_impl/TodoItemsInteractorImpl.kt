@@ -8,7 +8,9 @@ import javax.inject.Inject
 
 internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteractor {
 
-    private val todoItems: MutableStateFlow<List<TodoItem>> = MutableStateFlow(emptyList())
+    private val todoItems: MutableStateFlow<List<TodoItem>> = MutableStateFlow(
+        getMockItems()
+    )
 
     override suspend fun addItem(item: TodoItem) {
         val list = todoItems.value.toMutableList()
@@ -16,4 +18,13 @@ internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteract
         todoItems.emit(list)
     }
     override fun getItems(): Flow<List<TodoItem>> = todoItems
+
+    private fun getMockItems(): List<TodoItem>{
+        return listOf(
+            TodoItem("1","1"),
+            TodoItem("2","2"),
+            TodoItem("3","3"),
+            TodoItem("4","4"),
+        )
+    }
 }

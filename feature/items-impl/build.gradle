@@ -17,6 +17,7 @@ dependencies {
 
     implementation(
             project(':core:di'),
+            project(':core:ui'),
             project(':feature:create-api'),
             project(':feature:items-api'),
             project(':feature:todo-items-api'),

@@ -1,41 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/back_light_primary">
+
+    <Button
+        android:id="@+id/closeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/close_icon"
+        android:scaleX="0.3"
+        android:scaleY="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:text="save"
+        android:textColor="@color/color_light_blue"
+        android:textSize="18sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:layout_width="0dp"
+        android:id="@+id/editText"
+        android:layout_height="150dp"
+        android:hint="what needs to be done..."
+        android:layout_margin="30dp"
+        android:background="@drawable/edittext_background"
+        android:elevation="4dp"
+        android:gravity="top|start"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/saveButton" />
 
     <LinearLayout
+        android:id="@+id/linear_priority"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/editText">
 
-        <Button
-            android:id="@+id/closeButton"
+        <TextView
+            android:id="@+id/priorityTextView"
+            android:layout_width="178dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Priority:"
+            android:textColor="@color/label_light_primary"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/close_icon"
-            />
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="save"
-            android:layout_gravity="right"/>
+            android:layout_gravity="center"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="2"
+            android:gravity="left" />
 
     </LinearLayout>
-    <EditText
-        android:id="@+id/editText"
-        android:hint="what needs to be done..."
-        android:layout_width="match_parent"
-        android:layout_height="90dp"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="30dp"
+        android:background="#7F000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_priority" />
+
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
-        />
+        android:layout_marginTop="30dp"
+        android:background="@android:color/transparent"
+        android:drawableLeft="@drawable/delete_icon"
+        android:textColor="@color/label_light_primary"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@id/linear_priority"
+        app:layout_constraintTop_toBottomOf="@id/line" />
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
