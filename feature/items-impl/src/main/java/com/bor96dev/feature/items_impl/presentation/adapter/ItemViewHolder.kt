@@ -1,6 +1,7 @@
 package com.bor96dev.feature.items_impl.presentation.adapter
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bor96dev.feature.items_impl.presentation.model.ItemUi
@@ -11,6 +12,14 @@ internal class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
 
     fun bind(item: ItemUi) {
         itemView.findViewById<TextView>(R.id.item_text).text = item.text
-    }
 
+        itemView.findViewById<ImageView>(R.id.priorityIcon).apply {
+            visibility = if (item.isPriorityVisible) {
+                setImageResource(item.priorityDrawableId)
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
+    }
 }

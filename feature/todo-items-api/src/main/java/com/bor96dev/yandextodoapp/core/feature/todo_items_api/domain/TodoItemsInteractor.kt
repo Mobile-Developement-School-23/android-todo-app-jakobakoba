@@ -4,7 +4,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface TodoItemsInteractor {
 
-    suspend fun addItem(item: TodoItem)
+    suspend fun addItem(
+        text: String,
+        priority: TodoItemPriority
+    )
 
     fun getItems(): Flow<List<TodoItem>>
 }

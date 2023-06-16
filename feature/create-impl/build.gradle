@@ -19,12 +19,15 @@ dependencies {
             project(':core:di'),
             project(':core:ui'),
             project(':feature:create-api'),
+            project(':feature:todo-items-api'),
 
             deps.androidx.appcompat,
+            deps.androidx.constraintlayout,
+            deps.androidx.fragment_ktx,
             deps.cicerone.cicerone,
+            deps.coroutines.coroutines,
             deps.dagger.dagger,
     )
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     kapt(
             deps.dagger.compiler

@@ -1,6 +1,7 @@
 package com.bor96dev.yandextodoapp.core.feature.todo_items_impl
 
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItem
+import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemPriority
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemsInteractor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,19 +13,26 @@ internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteract
         getMockItems()
     )
 
-    override suspend fun addItem(item: TodoItem) {
+    override suspend fun addItem(
+        text: String,
+        priority: TodoItemPriority
+    ) {
         val list = todoItems.value.toMutableList()
-        list.add(item)
+        list.add(
+            TodoItem(
+                System.currentTimeMillis().toString(),
+                text,
+                priority
+            )
+        )
         todoItems.emit(list)
     }
+
     override fun getItems(): Flow<List<TodoItem>> = todoItems
 
-    private fun getMockItems(): List<TodoItem>{
+    private fun getMockItems(): List<TodoItem> {
         return listOf(
-            TodoItem("1","1"),
-            TodoItem("2","2"),
-            TodoItem("3","3"),
-            TodoItem("4","4"),
+            TodoItem("1", "1", TodoItemPriority.LOW),
         )
     }
 }
