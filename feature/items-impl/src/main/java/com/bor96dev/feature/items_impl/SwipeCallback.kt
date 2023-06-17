@@ -28,7 +28,6 @@ internal class BaseMainSwipeCallback(
         backgroundRight.color = ContextCompat.getColor(context, android.R.color.holo_red_light)
     }
 
-//    override fun isItemViewSwipeEnabled(): Boolean = isSwipe
 
     override fun onChildDraw(
         c: Canvas,
@@ -106,7 +105,7 @@ internal class BaseMainSwipeCallback(
         val intrinsicWidth = icon?.intrinsicWidth
         val intrinsicHeight = icon?.intrinsicHeight
 
-        // Calculate position icon
+
         val itemHeight = itemView.bottom - itemView.top
         val deleteIconTop = itemView.top + (itemHeight - intrinsicHeight!!) / 2
         val deleteIconMargin = (itemHeight - intrinsicHeight!!) / 2
@@ -118,7 +117,7 @@ internal class BaseMainSwipeCallback(
             else itemViewDirection + deleteIconMargin + intrinsicWidth!!
         val deleteIconBottom = deleteIconTop + intrinsicHeight
 
-        // Draw icon
+
         icon?.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
         icon?.draw(c)
     }
