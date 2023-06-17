@@ -8,10 +8,10 @@ apply from: "$rootDir/common.gradle"
 android {
     namespace 'com.bor96dev.yandextodoapp.core.feature.create_api'
 }
-
 dependencies {
-
     implementation(
+            project(':core:di'),
+
             deps.androidx.appcompat
     )
 }

@@ -7,16 +7,25 @@ apply from: "$rootDir/common.gradle"
 
 android {
     namespace 'com.bor96dev.yandextodoapp.core.feature.items_impl'
+
+    buildFeatures{
+        viewBinding true
+    }
 }
-
 dependencies {
-
     implementation(
             project(':core:di'),
+            project(':core:ui'),
+            project(':feature:create-api'),
             project(':feature:items-api'),
+            project(':feature:todo-items-api'),
 
             deps.androidx.appcompat,
+            deps.androidx.material,
+            deps.androidx.fragment_ktx,
             deps.dagger.dagger,
+            deps.cicerone.cicerone,
+            deps.coroutines.coroutines,
     )
 
     kapt(
