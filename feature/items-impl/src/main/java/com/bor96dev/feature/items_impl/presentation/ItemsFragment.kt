@@ -31,8 +31,10 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
 
     private val itemsAdapter: ItemsAdapter by lazy {
         ItemsAdapter(
+            requireContext(),
             { viewModel.onItemClicked(it) },
-            { id, isDone -> viewModel.onRadioButtonClicked(id, isDone) }
+            { id, isDone -> viewModel.onRadioButtonClicked(id, isDone) },
+            { viewModel.removeItemButtonClicked(it) }
         )
     }
 
@@ -54,7 +56,9 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
             }
             recycler.apply {
                 adapter = itemsAdapter
+                itemsAdapter.attachRecyclerView(this)
                 layoutManager = LinearLayoutManager(requireContext())
+
 
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -74,20 +78,12 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
             eyes.setOnClickListener {
                 viewModel.onEyeButtonClicked()
             }
-
-//            val swipeToDeleteCallback = object : SwipeToDeleteCallback(){
-//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                    val position = viewHolder.adapterPosition
-//                    viewModel.removeItemButtonClicked()
-//                    recycler.adapter?.notifyItemRemoved(position)
-//                }
-//            }
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.showNonDoneTasks.collect { showNonDoneTasks ->
+            viewModel.showNonDoneTasks.collectLatest { showNonDoneTasks ->
                 if (showNonDoneTasks) {
-                    binding.eyes.setBackgroundResource(R.drawable.eye_all)
+                    binding.eyes.setBackgroundResource(android.R.drawable.btn_star)
                 } else {
                     binding.eyes.setBackgroundResource(R.drawable.not_done_icon)
                 }

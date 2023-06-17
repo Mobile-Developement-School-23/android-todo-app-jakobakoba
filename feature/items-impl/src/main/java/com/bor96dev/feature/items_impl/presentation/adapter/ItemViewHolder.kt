@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.bor96dev.feature.items_impl.presentation.model.ItemUi
 import com.bor96dev.yandextodoapp.core.feature.items_impl.R
@@ -12,8 +13,16 @@ import com.bor96dev.yandextodoapp.core.feature.items_impl.R
 internal class ItemViewHolder(
     itemView: View,
     private val onItemClicked: (String) -> Unit,
-    private val onRadioButtonClicked: (String, Boolean) -> Unit
+    private val onRadioButtonClicked: (String, Boolean) -> Unit,
+    private val itemTouchHelper: ItemTouchHelper
 ) : RecyclerView.ViewHolder(itemView) {
+
+    init {
+        itemView.setOnLongClickListener {
+            itemTouchHelper.startSwipe(this)
+            false
+        }
+    }
 
     fun bind(item: ItemUi) {
         itemView.findViewById<TextView>(R.id.item_text).apply {

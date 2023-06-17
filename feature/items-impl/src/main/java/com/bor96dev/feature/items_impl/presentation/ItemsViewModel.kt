@@ -1,6 +1,5 @@
 package com.bor96dev.feature.items_impl.presentation
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModel
@@ -23,6 +22,9 @@ internal class ItemsViewModel @Inject constructor(
     private val createApi: CreateApi
 ) : ViewModel() {
 
+    private val _screenState = MutableStateFlow(ItemsState())
+    private val screenState: StateFlow<ItemsState> = _screenState
+
     private val _state = MutableStateFlow(emptyList<TodoItem>())
     val state: StateFlow<List<TodoItem>> = _state
 
@@ -30,12 +32,13 @@ internal class ItemsViewModel @Inject constructor(
     val doneItemsCount: StateFlow<Int> = _doneItemsCount
 
     private val _showNonDoneTasks = MutableStateFlow(true)
-    val showNonDoneTasks : StateFlow<Boolean> = _showNonDoneTasks.asStateFlow()
+    val showNonDoneTasks: StateFlow<Boolean> = _showNonDoneTasks.asStateFlow()
 
     init {
         viewModelScope.launch {
             todoItemsInteractor.getItems().collectLatest { it ->
-                Log.d("GTA5", "$it")
+
+
                 _state.emit(it)
                 _doneItemsCount.emit(it.count { it.isDone })
             }
@@ -55,18 +58,24 @@ internal class ItemsViewModel @Inject constructor(
                 createApi.getFragment(id)
         })
     }
-//    fun removeItemButtonClicked(id: String) {
-//        viewModelScope.launch {
-//            todoItemsInteractor.removeItem(id)
-//        }
-//    }
+
+    fun removeItemButtonClicked(id: String) {
+        viewModelScope.launch {
+            todoItemsInteractor.removeItem(id)
+        }
+    }
 
     fun onRadioButtonClicked(id: String, isDone: Boolean) {
         viewModelScope.launch {
             todoItemsInteractor.makeIsDone(id, isDone)
         }
     }
-    fun onEyeButtonClicked(){
-        _showNonDoneTasks.value = !_showNonDoneTasks.value
+
+    fun onEyeButtonClicked() {
+        viewModelScope.launch {
+            _showNonDoneTasks.emit(
+                !_showNonDoneTasks.value
+            )
+        }
     }
 }
