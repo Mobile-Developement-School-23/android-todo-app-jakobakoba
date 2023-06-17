@@ -52,7 +52,7 @@ internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteract
             TodoItem("1", "Сделать проект", TodoItemPriority.LOW, true),
             TodoItem("2", "Сходить за хлебом", TodoItemPriority.NORMAL, false),
             TodoItem("3", "Покормить собаку", TodoItemPriority.URGENT, false),
-            TodoItem("4", "Посмотреть фильм Флеш, купить чипсы", TodoItemPriority.LOW, false),
+            TodoItem("4", "Посмотреть фильм, купить чипсы", TodoItemPriority.LOW, false),
             TodoItem(
                 "5",
                 "Сходить в парикмахерскую, выбрать прическу, почистить кроссовки",
@@ -62,7 +62,7 @@ internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteract
             TodoItem("6", "Я смотрю далеко вниз налево направо", TodoItemPriority.URGENT, false),
             TodoItem("7", "Кот", TodoItemPriority.LOW, false),
             TodoItem("8", "К", TodoItemPriority.NORMAL, false),
-            TodoItem("9", "Снова седая ночь и только ей доверяю я", TodoItemPriority.URGENT, false),
+            TodoItem("9", "Прогуляться по парку", TodoItemPriority.URGENT, false),
             TodoItem(
                 "10",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce consectetur consequat nunc, ac pulvinar mauris tincidunt non. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed feugiat lectus tortor, vitae rhoncus libero tempor sit amet. Duis ultricies magna vitae erat feugiat, at lacinia urna suscipit. Phasellus id justo eget orci suscipit tempor. Vivamus auctor orci sit amet gravida sollicitudin. Nulla dapibus sapien a mauris facilisis, eget congue neque dignissim. Quisque elementum elit ac tellus ullamcorper lacinia. Curabitur aliquam dapibus vulputate. Donec vitae tellus auctor, pulvinar turpis eget, eleifend sem. In id nulla et purus volutpat tempor sed ut sem. Mauris nec justo tristique, efficitur elit sit amet, vestibulum metus. Aliquam sit amet eleifend velit, at fringilla leo.\n",

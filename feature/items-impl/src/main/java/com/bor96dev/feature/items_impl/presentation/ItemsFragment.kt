@@ -11,6 +11,7 @@ import com.bor96dev.core.di.daggerViewModels
 import com.bor96dev.core.di.findCoreDependencies
 import com.bor96dev.core.di.findFeatureDependencyProvider
 import com.bor96dev.core.di.viewBinding
+import com.bor96dev.feature.items_impl.SwipeToDeleteCallback
 import com.bor96dev.feature.items_impl.di.DaggerItemsComponent
 import com.bor96dev.feature.items_impl.presentation.adapter.ItemsAdapter
 import com.bor96dev.feature.items_impl.presentation.model.toUI
@@ -70,6 +71,13 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
                     }
                 })
             }
+//            val swipeToDeleteCallback = object : SwipeToDeleteCallback(){
+//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                    val position = viewHolder.adapterPosition
+//                    viewModel.removeItemButtonClicked()
+//                    recycler.adapter?.notifyItemRemoved(position)
+//                }
+//            }
         }
 
         lifecycleScope.launchWhenStarted {

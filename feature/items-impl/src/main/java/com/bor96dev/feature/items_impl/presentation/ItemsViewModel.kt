@@ -51,6 +51,11 @@ internal class ItemsViewModel @Inject constructor(
                 createApi.getFragment(id)
         })
     }
+//    fun removeItemButtonClicked(id: String) {
+//        viewModelScope.launch {
+//            todoItemsInteractor.removeItem(id)
+//        }
+//    }
 
     fun onRadioButtonClicked(id: String, isDone: Boolean) {
         viewModelScope.launch {
