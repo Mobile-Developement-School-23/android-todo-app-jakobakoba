@@ -12,6 +12,7 @@ import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +28,9 @@ internal class ItemsViewModel @Inject constructor(
 
     private val _doneItemsCount = MutableStateFlow(0)
     val doneItemsCount: StateFlow<Int> = _doneItemsCount
+
+    private val _showNonDoneTasks = MutableStateFlow(true)
+    val showNonDoneTasks : StateFlow<Boolean> = _showNonDoneTasks.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -61,5 +65,8 @@ internal class ItemsViewModel @Inject constructor(
         viewModelScope.launch {
             todoItemsInteractor.makeIsDone(id, isDone)
         }
+    }
+    fun onEyeButtonClicked(){
+        _showNonDoneTasks.value = !_showNonDoneTasks.value
     }
 }

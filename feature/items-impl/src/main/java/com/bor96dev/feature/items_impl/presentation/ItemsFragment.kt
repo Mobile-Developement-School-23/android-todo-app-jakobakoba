@@ -11,7 +11,6 @@ import com.bor96dev.core.di.daggerViewModels
 import com.bor96dev.core.di.findCoreDependencies
 import com.bor96dev.core.di.findFeatureDependencyProvider
 import com.bor96dev.core.di.viewBinding
-import com.bor96dev.feature.items_impl.SwipeToDeleteCallback
 import com.bor96dev.feature.items_impl.di.DaggerItemsComponent
 import com.bor96dev.feature.items_impl.presentation.adapter.ItemsAdapter
 import com.bor96dev.feature.items_impl.presentation.model.toUI
@@ -56,6 +55,7 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
             recycler.apply {
                 adapter = itemsAdapter
                 layoutManager = LinearLayoutManager(requireContext())
+
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         if (dy > 0 || dy < 0 && addButton.isShown) {
@@ -71,6 +71,10 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
                     }
                 })
             }
+            eyes.setOnClickListener {
+                viewModel.onEyeButtonClicked()
+            }
+
 //            val swipeToDeleteCallback = object : SwipeToDeleteCallback(){
 //                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 //                    val position = viewHolder.adapterPosition
@@ -81,10 +85,25 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
         }
 
         lifecycleScope.launchWhenStarted {
-            viewModel.state.collectLatest { list ->
-                itemsAdapter.submitList(list.map { it.toUI() })
-                binding.textNumber.text = viewModel.doneItemsCount.value.toString()
+            viewModel.showNonDoneTasks.collect { showNonDoneTasks ->
+                if (showNonDoneTasks) {
+                    binding.eyes.setBackgroundResource(R.drawable.eye_all)
+                } else {
+                    binding.eyes.setBackgroundResource(R.drawable.not_done_icon)
+                }
+
+
+                viewModel.state.collectLatest { list ->
+                    val filteredList = if (viewModel.showNonDoneTasks.value) {
+                        list.filter { !it.isDone }
+                    } else {
+                        list
+                    }
+                    itemsAdapter.submitList(filteredList.map { it.toUI() })
+                    binding.textNumber.text = viewModel.doneItemsCount.value.toString()
+                }
             }
         }
     }
 }
+
