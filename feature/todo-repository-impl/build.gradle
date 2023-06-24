@@ -6,21 +6,13 @@ plugins {
 apply from: "$rootDir/common.gradle"
 
 android {
-    namespace 'com.bor96dev.yandextodoapp.core.feature.todo_items_impl'
+    namespace 'com.bor96dev.yandextodoapp.core.feature.todo-items-api'
 }
 dependencies {
-
     implementation(
             project(':core:di'),
-            project(':feature:todo-items-api'),
             project(':feature:todo-repository-api'),
 
-
-            deps.coroutines.coroutines,
-            deps.dagger.dagger,
-    )
-
-    kapt(
-            deps.dagger.compiler
+            deps.androidx.appcompat
     )
 }
