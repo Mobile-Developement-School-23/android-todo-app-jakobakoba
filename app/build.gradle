@@ -43,6 +43,8 @@ dependencies {
             project(':feature:create-impl'),
             project(':feature:todo-items-api'),
             project(':feature:todo-items-impl'),
+            project(':feature:repository-todo-items-api'),
+            project(':feature:repository-todo-items-impl'),
 
             deps.androidx.appcompat,
             deps.androidx.material,

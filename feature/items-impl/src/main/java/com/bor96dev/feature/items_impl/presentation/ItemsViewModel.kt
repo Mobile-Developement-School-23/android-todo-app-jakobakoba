@@ -12,7 +12,6 @@ import com.github.terrakok.cicerone.androidx.FragmentScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,12 +35,12 @@ internal class ItemsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            todoItemsInteractor.getItems().collectLatest { it ->
+            val items = todoItemsInteractor.getItems()
 
 
-                _state.emit(it)
-                _doneItemsCount.emit(it.count { it.isDone })
-            }
+            _state.emit(items)
+            _doneItemsCount.emit(items.count { it.isDone })
+
         }
     }
 

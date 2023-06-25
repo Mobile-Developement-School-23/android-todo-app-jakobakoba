@@ -1,13 +1,15 @@
 package com.bor96dev.yandextodoapp.core.feature.todo_items_impl
 
+import com.bor96dev.feature.repository_todo_items_api.TodoItemsRepository
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItem
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemPriority
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemsInteractor
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
-internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteractor {
+internal class TodoItemsInteractorImpl @Inject constructor(
+    private val repository: TodoItemsRepository
+) : TodoItemsInteractor {
 
     private val todoItems: MutableStateFlow<List<TodoItem>> = MutableStateFlow(
         getMockItems()
@@ -45,7 +47,9 @@ internal class TodoItemsInteractorImpl @Inject constructor() : TodoItemsInteract
         todoItems.emit(array)
     }
 
-    override fun getItems(): Flow<List<TodoItem>> = todoItems
+    override suspend fun getItems(): List<TodoItem> {
+        return repository.getList()
+    }
 
     private fun getMockItems(): List<TodoItem> {
         return listOf(

@@ -11,8 +11,14 @@ android {
 dependencies {
     implementation(
             project(':core:di'),
+            project(':feature:repository-todo-items-api'),
+            project(':feature:todo-items-api'),
+
             deps.coroutines.coroutines,
             deps.dagger.dagger,
+            deps.squareup.retrofit,
+            deps.squareup.converter_moshi,
+            deps.squareup.okhttp,
     )
 
     kapt(

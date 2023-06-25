@@ -1,7 +1,5 @@
 package com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain
 
-import kotlinx.coroutines.flow.Flow
-
 interface TodoItemsInteractor {
 
     suspend fun addItem(
@@ -15,5 +13,5 @@ interface TodoItemsInteractor {
 
     suspend fun removeItem(id: String)
 
-    fun getItems(): Flow<List<TodoItem>>
+    suspend fun getItems(): List<TodoItem>
 }

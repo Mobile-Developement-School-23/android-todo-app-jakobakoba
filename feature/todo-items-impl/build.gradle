@@ -13,6 +13,7 @@ dependencies {
     implementation(
             project(':core:di'),
             project(':feature:todo-items-api'),
+            project(':feature:repository-todo-items-api'),
 
             deps.coroutines.coroutines,
             deps.dagger.dagger,
