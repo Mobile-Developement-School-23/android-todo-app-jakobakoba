@@ -1,4 +1,4 @@
-package com.bor96dev.feature.repository_todo_items_impl.data
+package com.bor96dev.feature.repository_todo_items_impl.data.request
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
