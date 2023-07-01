@@ -47,7 +47,6 @@ internal class ItemsViewModel @Inject constructor(
     fun removeItemButtonClicked(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             todoItemsInteractor.removeItem(id)
-            updateItems()
         }
     }
 

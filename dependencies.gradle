@@ -53,7 +53,6 @@ deps.dagger = dagger
 
 def lifecycle = [:]
 lifecycle.viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
-
 deps.lifecycle = lifecycle
 
 def squareup = [:]
