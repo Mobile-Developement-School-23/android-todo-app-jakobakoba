@@ -2,6 +2,7 @@ package com.bor96dev.feature.items_impl.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import com.bor96dev.feature.items_impl.presentation.adapter.ItemsAdapter
 import com.bor96dev.yandextodoapp.core.feature.items_impl.R
 import com.bor96dev.yandextodoapp.core.feature.items_impl.databinding.ItemsFragmentBinding
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -78,29 +80,36 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
                 viewModel.onEyeButtonClicked()
             }
         }
+        lifecycleScope.launch {
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.showNonDoneTasks.collectLatest { showNonDoneTasks ->
-                if (showNonDoneTasks) {
-                    binding.eyes.setBackgroundResource(android.R.drawable.btn_star)
-                } else {
-                    binding.eyes.setBackgroundResource(R.drawable.not_done_icon)
+                viewModel.showNonDoneTasks.collectLatest {showNonDoneTasks ->
+                    Log.d("GTA5", "showNonDoneTasks $showNonDoneTasks")
+                    if (showNonDoneTasks) {
+                        binding.eyes.setBackgroundResource(android.R.drawable.btn_star)
+                    } else {
+                        binding.eyes.setBackgroundResource(R.drawable.not_done_icon)
+                    }
+                }
+
+                viewModel.todos.collectLatest{ value->
+                    Log.d("GTA5", "todos = $value")
+                    itemsAdapter.submitList(value)
+                }
+
+                viewModel.doneItemsCount.collectLatest {doneItemCount ->
+                    Log.d("GTA5", "doneItemscount = $doneItemCount")
+                    binding.textNumber.text = doneItemCount.toString()
                 }
             }
-
-            itemsAdapter.submitList( viewModel.todos.value)
-
-            viewModel.doneItemsCount.collectLatest {doneItemCount ->
-
-                binding.textNumber.text = doneItemCount.toString()
-            }
-
         }
-    }
+
+
+
+
 
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
-    }
-}
+    } }
+
 

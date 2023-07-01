@@ -26,6 +26,7 @@ dependencies {
             deps.dagger.dagger,
             deps.cicerone.cicerone,
             deps.coroutines.coroutines,
+            deps.compose.runtime
     )
 
     kapt(
