@@ -17,9 +17,9 @@ internal class TodoItemsInteractorImpl @Inject constructor(
         repository.addElement(text)
     }
 
-    override suspend fun makeIsDone(id: String, isDone: Boolean) {
-        val element = repository.getElement(id).copy(isDone = !isDone)
-        repository.updateElement(element)
+    override suspend fun makeIsDone(id: String) {
+        val element = repository.getElement(id)
+        repository.updateElement(element.copy(isDone = !element.isDone))
     }
 
     override suspend fun getItem(id: String): TodoItem {

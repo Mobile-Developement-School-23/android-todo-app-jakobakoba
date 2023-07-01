@@ -13,7 +13,7 @@ import com.bor96dev.yandextodoapp.core.feature.items_impl.R
 internal class ItemViewHolder(
     itemView: View,
     private val onItemClicked: (String) -> Unit,
-    private val onRadioButtonClicked: (String, Boolean) -> Unit,
+    private val onRadioButtonClicked: (String) -> Unit,
     private val itemTouchHelper: ItemTouchHelper
 ) : RecyclerView.ViewHolder(itemView) {
 
@@ -46,7 +46,7 @@ internal class ItemViewHolder(
         itemView.findViewById<CheckBox>(R.id.statusIcon).apply {
             isChecked = item.isRadioButtonEnabled
             setOnClickListener {
-                onRadioButtonClicked(item.id, isChecked)
+                onRadioButtonClicked(item.id)
             }
         }
 

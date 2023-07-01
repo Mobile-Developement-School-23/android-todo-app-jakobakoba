@@ -13,7 +13,7 @@ import com.bor96dev.yandextodoapp.core.feature.items_impl.R
 internal class ItemsAdapter(
     private val context: Context,
     private val onItemClicked: (String) -> Unit,
-    private val onRadioButtonClicked: (String, Boolean) -> Unit,
+    private val onRadioButtonClicked: (String) -> Unit,
     private val onRemoveButtonClicked: (String) -> Unit
 ) : ListAdapter<ItemUi, ItemViewHolder>(ItemsDiffUtil()) {
 

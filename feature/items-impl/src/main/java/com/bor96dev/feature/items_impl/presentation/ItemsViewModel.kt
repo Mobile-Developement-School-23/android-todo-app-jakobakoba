@@ -1,20 +1,18 @@
 package com.bor96dev.feature.items_impl.presentation
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bor96dev.feature.create_api.CreateApi
-import com.bor96dev.feature.items_impl.presentation.model.ItemUi
 import com.bor96dev.feature.items_impl.presentation.model.toUI
+import com.bor96dev.yandextodoapp.core.feature.items_impl.R
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemsInteractor
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -26,19 +24,10 @@ internal class ItemsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow(ItemsState())
-    private val screenState: StateFlow<ItemsState> = _screenState
-
-    private val _todos = MutableStateFlow(emptyList<ItemUi>())
-    val todos: StateFlow<List<ItemUi>> = _todos
-
-    private val _doneItemsCount = MutableStateFlow(0)
-    val doneItemsCount: StateFlow<Int> = _doneItemsCount
-
-    private val _showNonDoneTasks = MutableStateFlow(true)
-    val showNonDoneTasks: StateFlow<Boolean> = _showNonDoneTasks.asStateFlow()
+    val screenState: StateFlow<ItemsState> = _screenState
 
     init {
-      updateItems()
+        updateItems()
     }
 
     fun onAddButtonClicked() {
@@ -58,39 +47,55 @@ internal class ItemsViewModel @Inject constructor(
     fun removeItemButtonClicked(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             todoItemsInteractor.removeItem(id)
-            updateItems()
         }
     }
 
-    fun onRadioButtonClicked(id: String, isDone: Boolean) {
+    fun onRadioButtonClicked(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            todoItemsInteractor.makeIsDone(id, isDone)
+            todoItemsInteractor.makeIsDone(id)
             updateItems()
         }
     }
 
     fun onEyeButtonClicked() {
         viewModelScope.launch {
-            _showNonDoneTasks.emit(
-                !_showNonDoneTasks.value
+            val state = _screenState.value
+
+            val showNonDoneTasks = !state.showNonDoneTasks
+            val drawable = if (!state.showNonDoneTasks) {
+                android.R.drawable.btn_star
+            } else {
+                R.drawable.not_done_icon
+            }
+
+            _screenState.emit(
+                _screenState.value.copy(
+                    showNonDoneTasks = showNonDoneTasks,
+                    doneDrawable = drawable,
+                )
             )
+
+            updateItems()
         }
     }
 
     private fun updateItems() {
         viewModelScope.launch {
             val items = withContext(Dispatchers.IO) { todoItemsInteractor.getItems() }
-            val filteredItems = if (showNonDoneTasks.value) {
-
-                items
+            val filteredItems = if (_screenState.value.showNonDoneTasks) {
+                items.filter { !it.isDone }
             } else {
                 items
+            }.map { it.toUI() }
 
-            }
-            Log.d("GTA5", "items = $items \n filtered items = $filteredItems")
+            val doneText = items.filter { it.isDone }.size
 
-            _todos.emit(filteredItems.map { it.toUI() })
-            _doneItemsCount.emit(items.count { it.isDone })
+            _screenState.emit(
+                _screenState.value.copy(
+                    items = filteredItems,
+                    doneText = doneText.toString()
+                )
+            )
         }
     }
 

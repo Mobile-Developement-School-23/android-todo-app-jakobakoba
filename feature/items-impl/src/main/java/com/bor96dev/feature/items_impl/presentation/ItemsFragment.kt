@@ -16,6 +16,7 @@ import com.bor96dev.feature.items_impl.presentation.adapter.ItemsAdapter
 import com.bor96dev.yandextodoapp.core.feature.items_impl.R
 import com.bor96dev.yandextodoapp.core.feature.items_impl.databinding.ItemsFragmentBinding
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -32,7 +33,7 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
         ItemsAdapter(
             requireContext(),
             { viewModel.onItemClicked(it) },
-            { id, isDone -> viewModel.onRadioButtonClicked(id, isDone) },
+            { viewModel.onRadioButtonClicked(it) },
             { viewModel.removeItemButtonClicked(it) }
         )
     }
@@ -79,28 +80,24 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
             }
         }
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.showNonDoneTasks.collectLatest { showNonDoneTasks ->
-                if (showNonDoneTasks) {
-                    binding.eyes.setBackgroundResource(android.R.drawable.btn_star)
-                } else {
-                    binding.eyes.setBackgroundResource(R.drawable.not_done_icon)
-                }
+        render()
+    }
+
+    private fun render() {
+        lifecycleScope.launch {
+            viewModel.screenState.collectLatest { state ->
+                binding.eyes.setBackgroundResource(state.doneDrawable)
+                binding.textNumber.text = state.doneText
+                itemsAdapter.submitList(state.items)
             }
-
-            itemsAdapter.submitList( viewModel.todos.value)
-
-            viewModel.doneItemsCount.collectLatest {doneItemCount ->
-
-                binding.textNumber.text = doneItemCount.toString()
-            }
-
         }
     }
+
 
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
     }
 }
+
 

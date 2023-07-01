@@ -7,7 +7,7 @@ interface TodoItemsInteractor {
         priority: TodoItemPriority
     )
 
-    suspend fun makeIsDone(id: String, isDone: Boolean)
+    suspend fun makeIsDone(id: String)
 
     suspend fun getItem(id: String): TodoItem
 
