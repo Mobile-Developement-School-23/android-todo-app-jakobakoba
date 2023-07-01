@@ -13,7 +13,6 @@ import com.bor96dev.core.di.findFeatureDependencyProvider
 import com.bor96dev.core.di.viewBinding
 import com.bor96dev.feature.items_impl.di.DaggerItemsComponent
 import com.bor96dev.feature.items_impl.presentation.adapter.ItemsAdapter
-import com.bor96dev.feature.items_impl.presentation.model.toUI
 import com.bor96dev.yandextodoapp.core.feature.items_impl.R
 import com.bor96dev.yandextodoapp.core.feature.items_impl.databinding.ItemsFragmentBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -87,19 +86,21 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
                 } else {
                     binding.eyes.setBackgroundResource(R.drawable.not_done_icon)
                 }
-
-
-                viewModel.state.collectLatest { list ->
-                    val filteredList = if (viewModel.showNonDoneTasks.value) {
-                        list.filter { !it.isDone }
-                    } else {
-                        list
-                    }
-                    itemsAdapter.submitList(filteredList.map { it.toUI() })
-                    binding.textNumber.text = viewModel.doneItemsCount.value.toString()
-                }
             }
+
+            itemsAdapter.submitList( viewModel.todos.value)
+
+            viewModel.doneItemsCount.collectLatest {doneItemCount ->
+
+                binding.textNumber.text = doneItemCount.toString()
+            }
+
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume()
     }
 }
 
