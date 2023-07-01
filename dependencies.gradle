@@ -19,6 +19,10 @@ versions.dagger = '2.44.2'
 
 versions.lifecycle = '2.6.0'
 
+versions.retrofit = '2.9.0'
+
+versions.okhttp = '4.11.0'
+
 /* Dependencies */
 
 ext.deps = [:]
@@ -48,3 +52,9 @@ deps.dagger = dagger
 def lifecycle = [:]
 lifecycle.viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
 deps.lifecycle = lifecycle
+
+def squareup = [:]
+squareup.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+squareup.converter_moshi = "com.squareup.retrofit2:converter-moshi:$versions.retrofit"
+squareup.okhttp = "com.squareup.okhttp3:okhttp:$versions.okhttp"
+deps.squareup = squareup
