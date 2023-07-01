@@ -2,7 +2,6 @@ package com.bor96dev.feature.items_impl.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -34,7 +33,7 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
         ItemsAdapter(
             requireContext(),
             { viewModel.onItemClicked(it) },
-            { id, isDone -> viewModel.onRadioButtonClicked(id, isDone) },
+            { viewModel.onRadioButtonClicked(it) },
             { viewModel.removeItemButtonClicked(it) }
         )
     }
@@ -80,36 +79,25 @@ internal class ItemsFragment : Fragment(R.layout.items_fragment) {
                 viewModel.onEyeButtonClicked()
             }
         }
+
+        render()
+    }
+
+    private fun render() {
         lifecycleScope.launch {
-
-                viewModel.showNonDoneTasks.collectLatest {showNonDoneTasks ->
-                    Log.d("GTA5", "showNonDoneTasks $showNonDoneTasks")
-                    if (showNonDoneTasks) {
-                        binding.eyes.setBackgroundResource(android.R.drawable.btn_star)
-                    } else {
-                        binding.eyes.setBackgroundResource(R.drawable.not_done_icon)
-                    }
-                }
-
-                viewModel.todos.collectLatest{ value->
-                    Log.d("GTA5", "todos = $value")
-                    itemsAdapter.submitList(value)
-                }
-
-                viewModel.doneItemsCount.collectLatest {doneItemCount ->
-                    Log.d("GTA5", "doneItemscount = $doneItemCount")
-                    binding.textNumber.text = doneItemCount.toString()
-                }
+            viewModel.screenState.collectLatest { state ->
+                binding.eyes.setBackgroundResource(state.doneDrawable)
+                binding.textNumber.text = state.doneText
+                itemsAdapter.submitList(state.items)
             }
         }
-
-
-
+    }
 
 
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
-    } }
+    }
+}
 
 

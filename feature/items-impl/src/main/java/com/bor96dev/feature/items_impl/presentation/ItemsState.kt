@@ -1,11 +1,10 @@
 package com.bor96dev.feature.items_impl.presentation
 
-import com.bor96dev.yandextodoapp.core.feature.items_impl.R
-import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItem
+import com.bor96dev.feature.items_impl.presentation.model.ItemUi
 
-data class ItemsState(
-    val isDoneVisible: Boolean = false,
-    val doneDrawable: Int = R.drawable.eye_all,
+internal data class ItemsState(
+    val showNonDoneTasks: Boolean = true,
+    val doneDrawable: Int = android.R.drawable.btn_star,
     val doneText: String = "0 ",
-    val items: List<TodoItem> = emptyList()
+    val items: List<ItemUi> = emptyList()
 )
