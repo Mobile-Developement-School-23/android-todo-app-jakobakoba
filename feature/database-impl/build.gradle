@@ -6,23 +6,27 @@ plugins {
 apply from: "$rootDir/common.gradle"
 
 android {
-    namespace 'com.bor96dev.feature.repository_todo_item_impl'
+    namespace 'com.bor96dev.feature.database-impl'
 }
 dependencies {
     implementation(
             project(':core:di'),
-            project(':feature:repository-todo-items-api'),
-            project(':feature:todo-items-api'),
             project(':feature:database-api'),
+            project(':feature:todo-items-api'),
 
             deps.coroutines.coroutines,
             deps.dagger.dagger,
             deps.squareup.retrofit,
             deps.squareup.converter_moshi,
             deps.squareup.okhttp,
+            deps.room.room,
+            deps.room.ktx
+
+
     )
 
     kapt(
-            deps.dagger.compiler
+            deps.dagger.compiler,
+            deps.room.compiler
     )
 }
