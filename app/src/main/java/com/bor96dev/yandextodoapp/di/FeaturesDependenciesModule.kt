@@ -1,5 +1,7 @@
 package com.bor96dev.yandextodoapp.di
 
+import android.content.Context
+import com.bor96dev.core.di.ContextProvider
 import com.bor96dev.core.di.PerFeature
 import com.bor96dev.feature.create_api.CreateApi
 import com.bor96dev.feature.create_impl.api.CreateImpl
@@ -37,5 +39,11 @@ internal class FeaturesDependenciesModule {
 
     @Provides
     @PerFeature
-    fun provideDatabaseApi(): DatabaseApi = getDatabaseApi()
+    fun provideDatabaseApi(contextProvider: ContextProvider): DatabaseApi = getDatabaseApi(contextProvider)
+
+    @Provides
+    @PerFeature
+    fun provideContextProvider(context: Context): ContextProvider = object : ContextProvider {
+        override fun context(): Context = context
+    }
 }

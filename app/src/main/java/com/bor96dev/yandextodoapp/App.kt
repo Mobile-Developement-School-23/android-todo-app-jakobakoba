@@ -13,7 +13,7 @@ internal class App : Application(),
     CoreApp,
     MainComponentGetter {
 
-    private val component = DaggerMainComponent.create()
+    private val component = DaggerMainComponent.factory().create(applicationContext)
 
     override fun coreDependencies(): CoreDependencies = component
 

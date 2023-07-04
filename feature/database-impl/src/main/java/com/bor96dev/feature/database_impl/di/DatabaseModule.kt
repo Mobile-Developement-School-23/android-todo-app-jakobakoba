@@ -17,13 +17,13 @@ internal class DatabaseModule {
     @Provides
     fun provideDatabaseRepository(impl: DatabaseRepositoryImpl): DatabaseRepository = impl
 
-//    @PerFeature
-//    @Provides
-//    fun provideTodoItemDao(context: Context): TodoItemDao {
-//        return Room.databaseBuilder(
-//            context,
-//            TodoItemDatabase::class.java, "database"
-//        ).build()
-//            .todoItemDao()
-//    }
+    @PerFeature
+    @Provides
+    fun provideTodoItemDao(context: Context): TodoItemDao {
+        return Room.databaseBuilder(
+            context,
+            TodoItemDatabase::class.java, "database"
+        ).build()
+            .todoItemDao()
+    }
 }
