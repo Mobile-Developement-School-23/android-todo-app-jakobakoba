@@ -6,7 +6,7 @@ plugins {
 apply from: "$rootDir/common.gradle"
 
 android {
-    namespace 'com.bor96dev.feature.database-impl'
+    namespace 'com.bor96dev.feature.database_impl'
 }
 dependencies {
     implementation(
@@ -16,13 +16,12 @@ dependencies {
 
             deps.coroutines.coroutines,
             deps.dagger.dagger,
+            deps.cicerone.cicerone,
             deps.squareup.retrofit,
             deps.squareup.converter_moshi,
             deps.squareup.okhttp,
             deps.room.room,
             deps.room.ktx
-
-
     )
 
     kapt(

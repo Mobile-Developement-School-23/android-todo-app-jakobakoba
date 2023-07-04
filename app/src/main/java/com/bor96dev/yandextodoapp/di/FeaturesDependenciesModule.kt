@@ -3,6 +3,8 @@ package com.bor96dev.yandextodoapp.di
 import com.bor96dev.core.di.PerFeature
 import com.bor96dev.feature.create_api.CreateApi
 import com.bor96dev.feature.create_impl.api.CreateImpl
+import com.bor96dev.feature.database_api.DatabaseApi
+import com.bor96dev.feature.database_impl.api.getDatabaseApi
 import com.bor96dev.feature.items_api.ItemsApi
 import com.bor96dev.feature.items_impl.api.ItemsImpl
 import com.bor96dev.feature.repository_todo_items_api.RepositoryTodoItemsApi
@@ -29,5 +31,11 @@ internal class FeaturesDependenciesModule {
 
     @Provides
     @PerFeature
-    fun provideRepositoryTodoItemsApi(): RepositoryTodoItemsApi = getRepositoryTodoItemsApi()
+    fun provideRepositoryTodoItemsApi(
+        databaseApi: DatabaseApi
+    ): RepositoryTodoItemsApi = getRepositoryTodoItemsApi(databaseApi)
+
+    @Provides
+    @PerFeature
+    fun provideDatabaseApi(): DatabaseApi = getDatabaseApi()
 }

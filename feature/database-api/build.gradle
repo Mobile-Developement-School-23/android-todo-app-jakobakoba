@@ -6,7 +6,7 @@ plugins {
 apply from: "$rootDir/common.gradle"
 
 android {
-    namespace 'com.bor96dev.feature.database-api'
+    namespace 'com.bor96dev.feature.database_api'
 }
 dependencies {
     implementation(

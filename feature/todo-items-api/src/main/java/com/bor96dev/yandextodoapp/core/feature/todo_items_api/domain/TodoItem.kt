@@ -5,4 +5,13 @@ data class TodoItem(
     val text: String,
     val priority: TodoItemPriority,
     val isDone: Boolean
-)
+) {
+    companion object {
+        val EMPTY = TodoItem(
+            id = "",
+            text = "",
+            priority = TodoItemPriority.URGENT,
+            isDone = false
+        )
+    }
+}
