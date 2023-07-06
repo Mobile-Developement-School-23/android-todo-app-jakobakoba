@@ -6,6 +6,7 @@ import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItem
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemPriority
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemsInteractor
 import com.github.terrakok.cicerone.Router
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -28,7 +29,7 @@ class CreateViewModel @Inject constructor(
         }
     }
     fun removeItemButtonClicked(id: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             todoItemsInteractor.removeItem(id)
         }
         router.exit()
@@ -40,7 +41,7 @@ class CreateViewModel @Inject constructor(
         text: String,
         priority: TodoItemPriority
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             todoItemsInteractor.addItem(text, priority)
         }
         router.exit()
