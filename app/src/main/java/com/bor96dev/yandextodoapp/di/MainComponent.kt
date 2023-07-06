@@ -1,13 +1,11 @@
 package com.bor96dev.yandextodoapp.di
 
-import android.content.Context
 import com.bor96dev.core.di.CoreDependencies
 import com.bor96dev.core.di.PerFeature
 import com.bor96dev.feature.create_api.CreateApiProvider
 import com.bor96dev.feature.database_api.DatabaseApiProvider
 import com.bor96dev.yandextodoapp.MainActivity
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.TodoItemsApiProvider
-import dagger.BindsInstance
 import dagger.Component
 
 @PerFeature
@@ -22,11 +20,6 @@ internal interface MainComponent :
     TodoItemsApiProvider,
     CreateApiProvider,
     DatabaseApiProvider {
-
-    @Component.Factory
-    interface Builder {
-        fun create(@BindsInstance context: Context): MainComponent
-    }
 
     fun inject(activity: MainActivity)
 }

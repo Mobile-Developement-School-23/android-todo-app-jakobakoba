@@ -17,7 +17,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-internal class FeaturesDependenciesModule {
+internal class FeaturesDependenciesModule(val context: Context) {
 
     @Provides
     @PerFeature
@@ -40,6 +40,10 @@ internal class FeaturesDependenciesModule {
     @Provides
     @PerFeature
     fun provideDatabaseApi(contextProvider: ContextProvider): DatabaseApi = getDatabaseApi(contextProvider)
+
+    @Provides
+    @PerFeature
+    fun provideContext(): Context = context
 
     @Provides
     @PerFeature
