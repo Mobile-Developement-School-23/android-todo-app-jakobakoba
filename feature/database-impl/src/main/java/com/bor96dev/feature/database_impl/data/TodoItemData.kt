@@ -10,10 +10,11 @@ internal data class TodoItemData(
     @PrimaryKey val uid: String,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "is_done") val isDone: Boolean,
+    @ColumnInfo(name = "changed_at") val changedAt: Long
 )
 
 internal fun TodoItemData.toApi(): TodoItemEntity {
     return TodoItemEntity(
-        uid, name, isDone
+        uid, name, isDone, System.currentTimeMillis()
     )
 }

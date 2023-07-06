@@ -1,5 +1,6 @@
 package com.bor96dev.feature.database_impl
 
+import android.util.Log
 import com.bor96dev.feature.database_api.DatabaseRepository
 import com.bor96dev.feature.database_api.TodoItemEntity
 import com.bor96dev.feature.database_impl.dao.TodoItemDao
@@ -15,7 +16,7 @@ internal class DatabaseRepositoryImpl @Inject constructor(
         uuid: String,
         name: String,
     ) {
-        val item = TodoItemData(uuid, name, false)
+        val item = TodoItemData(uuid, name, false, System.currentTimeMillis())
 
         todoItemDao.insert(item)
     }
@@ -25,7 +26,7 @@ internal class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getItem(id: String): TodoItemEntity {
-        return todoItemDao.getItem(id).toApi()
+        return todoItemDao.getItem(id)!!.toApi()
     }
 
     override suspend fun deleteItem(id: String) {
@@ -35,9 +36,16 @@ internal class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun updateItem(
         id: String,
         text: String,
-        priority: String,
-        isDone: Boolean
+        isDone: Boolean,
+        changedAt: Long
     ) {
-        todoItemDao.updateItem(id, text, isDone)
+
+        if (todoItemDao.getItem(id) == null) {
+            todoItemDao.insert(TodoItemData(id, text, isDone, changedAt))
+        }
+
+
+
+        todoItemDao.updateItem(id, text, isDone, changedAt)
     }
 }

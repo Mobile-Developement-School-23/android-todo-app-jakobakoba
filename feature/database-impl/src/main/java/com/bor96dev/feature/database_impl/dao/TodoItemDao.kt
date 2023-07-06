@@ -1,5 +1,6 @@
 package com.bor96dev.feature.database_impl.dao
 
+import android.database.sqlite.SQLiteException
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -16,15 +17,16 @@ internal interface TodoItemDao {
     fun insert(item: TodoItemData)
 
     @Query("SELECT * FROM todoitemdata WHERE uid = :id")
-    fun getItem(id: String): TodoItemData
+    @Throws(SQLiteException::class)
+    fun getItem(id: String): TodoItemData?
 
     @Query("DELETE FROM todoitemdata WHERE uid = :id")
     fun deleteItem(id:String)
 
     @Query(
         "UPDATE todoitemdata " +
-                "SET name = :name, is_done = :isDone " +
+                "SET name = :name, is_done = :isDone, changed_at = :changedAt " +
                 "WHERE uid = :id"
     )
-    fun updateItem(id: String, name: String, isDone: Boolean)
+    fun updateItem(id: String, name: String, isDone: Boolean, changedAt: Long)
 }

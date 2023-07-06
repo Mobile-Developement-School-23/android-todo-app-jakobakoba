@@ -1,75 +1,147 @@
 package com.bor96dev.feature.repository_todo_items_impl.data
 
+import android.util.Log
+import com.bor96dev.feature.database_api.DatabaseRepository
 import com.bor96dev.feature.repository_todo_items_api.TodoItemsRepository
-import com.bor96dev.feature.repository_todo_items_impl.data.response.AddElementRequest
+import com.bor96dev.feature.repository_todo_items_impl.TodoItemData
 import com.bor96dev.feature.repository_todo_items_impl.data.dto.TodoDto
+import com.bor96dev.feature.repository_todo_items_impl.data.mapper.databaseToData
+import com.bor96dev.feature.repository_todo_items_impl.data.mapper.networkToData
 import com.bor96dev.feature.repository_todo_items_impl.data.mapper.toData
 import com.bor96dev.feature.repository_todo_items_impl.data.mapper.toDomain
+import com.bor96dev.feature.repository_todo_items_impl.data.response.AddElementRequest
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItem
 import java.util.*
 import javax.inject.Inject
 
+
 internal class TodoItemsRepositoryImpl @Inject constructor(
     private val todoItemsApi: TodoItemsApi,
+    private val databaseRepository: DatabaseRepository,
 ) : TodoItemsRepository {
 
     private var revision = 0L
 
     override suspend fun getList(): List<TodoItem> {
-        val response = todoItemsApi.getList()
-        revision = response.revision
+        val list = try {
+            val response = todoItemsApi.getList()
+            revision = response.revision
+            response.list.map { it.toDomain() }
+        } catch (e: Exception) {
+            databaseRepository.getItems().map { it.toDomain() }
+        }
 
-        return response.list.map { it.toDomain() }
+        syncData()
+
+        return list
+    }
+
+    private suspend fun syncData() {
+        val networkList = try {
+            todoItemsApi.getList().list.map { it.networkToData() }
+        } catch (e: Exception) {
+            emptyList()
+        }
+        val databaseList = databaseRepository.getItems().map { it.databaseToData() }
+
+        val larger = if (networkList.size > databaseList.size) networkList else databaseList
+
+        val list = arrayListOf<TodoItemData>()
+
+        for (item in larger) {
+            val first = networkList.firstOrNull { it.id == item.id }
+            val second = databaseList.firstOrNull { it.id == item.id }
+
+            if ((first?.changedAt ?: -1) > (second?.changedAt ?: -1)) {
+                if (first != null) list.add(first)
+            } else {
+                if (second != null) list.add(second)
+            }
+        }
+
+        for (item in list) {
+            updateElement(item.toDomain())
+
+            databaseRepository.updateItem(
+                item.id,
+                item.name,
+                item.isDone,
+                item.changedAt
+            )
+        }
     }
 
     override suspend fun addElement(name: String) {
-        val time = System.currentTimeMillis()
+        val uuid = UUID.randomUUID().toString()
 
-        val mock = TodoDto.createMock(
-            id = UUID.randomUUID().toString(),
-            text = name,
-            created_at = time,
-            changed_at = time
-        )
+        try {
+            val time = System.currentTimeMillis()
 
-        val request = AddElementRequest(
-            element = mock,
 
+            val mock = TodoDto.createMock(
+                id = uuid,
+                text = name,
+                created_at = time,
+                changed_at = time
             )
 
-        val response = todoItemsApi.addElement(
-            revision,
-            request
-        )
+            val request = AddElementRequest(
+                element = mock,
 
-        revision = response.revision
+                )
+
+            val response = todoItemsApi.addElement(
+                revision,
+                request
+            )
+            revision = response.revision
+
+        } catch (e: Exception) {
+            databaseRepository.addElement(uuid, name)
+        }
+
     }
 
     override suspend fun getElement(id: String): TodoItem {
-        val response = todoItemsApi.getElement(id)
+        val item = try {
+            val response = todoItemsApi.getElement(id)
+            revision = response.revision
+            response.element.toDomain()
+        } catch (e: Exception) {
+            databaseRepository.getItem(id).toDomain()
+        }
 
-        revision = response.revision
 
-        return response.element.toDomain()
+
+        return item
     }
 
     override suspend fun deleteElement(id: String) {
-        val response = todoItemsApi.deleteElement(revision, id)
-
-        revision = response.revision
+        try {
+            val response = todoItemsApi.deleteElement(revision, id)
+            revision = response.revision
+        } catch (e: Exception) {
+            databaseRepository.deleteItem(id)
+        }
     }
 
     override suspend fun updateElement(todoItem: TodoItem) {
-        val element = todoItem.toData()
+        val changedAt = System.currentTimeMillis()
+
+        val element = todoItem.toData(changedAt)
 
         val request = AddElementRequest(element)
 
-        val response = todoItemsApi.updateElement(
-            revision,
-            element.id,
-            request
-        )
+        try {
+            val response = todoItemsApi.updateElement(
+                revision,
+                element.id,
+                request
+            )
 
-        revision = response.revision
+            revision = response.revision
+        } catch (e: Exception) {
+            databaseRepository.updateItem(todoItem.id, todoItem.text, todoItem.isDone, changedAt)
+        }
     }
 }

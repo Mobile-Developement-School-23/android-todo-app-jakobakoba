@@ -12,7 +12,7 @@ interface DatabaseRepository {
     suspend fun updateItem(
         id: String,
         text: String,
-        priority: String,
-        isDone: Boolean
+        isDone: Boolean,
+        changedAt: Long
     )
 }

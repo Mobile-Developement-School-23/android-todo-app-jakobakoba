@@ -10,11 +10,9 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 class CreateViewModel @AssistedInject constructor(
     @Assisted("id") private val id: String,
@@ -22,8 +20,8 @@ class CreateViewModel @AssistedInject constructor(
     private val todoItemsInteractor: TodoItemsInteractor,
 ) : ViewModel() {
 
-    private val _screenState = MutableSharedFlow<TodoItem>()
-    val state: SharedFlow<TodoItem> = _screenState
+    private val _screenState = MutableStateFlow(TodoItem.EMPTY)
+    val state: MutableStateFlow<TodoItem> = _screenState
 
     fun recreateScreen(id: String) {
         viewModelScope.launch {
@@ -53,12 +51,14 @@ class CreateViewModel @AssistedInject constructor(
             if (id.isEmpty()) {
                 todoItemsInteractor.addItem(text, priority)
             } else {
-                todoItemsInteractor.updateItem(TodoItem(
-                    id,
-                    text,
-                    priority,
-                    false // TODO брать из state экрана
-                ))
+                todoItemsInteractor.updateItem(
+                    TodoItem(
+                        id,
+                        text,
+                        priority,
+                        _screenState.value.isDone
+                    )
+                )
             }
         }
         router.exit()
