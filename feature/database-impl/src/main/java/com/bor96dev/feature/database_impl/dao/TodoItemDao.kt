@@ -18,4 +18,13 @@ internal interface TodoItemDao {
     @Query("SELECT * FROM todoitemdata WHERE uid = :id")
     fun getItem(id: String): TodoItemData
 
+    @Query("DELETE FROM todoitemdata WHERE uid = :id")
+    fun deleteItem(id:String)
+
+    @Query(
+        "UPDATE todoitemdata " +
+                "SET name = :name, is_done = :isDone " +
+                "WHERE uid = :id"
+    )
+    fun updateItem(id: String, name: String, isDone: Boolean)
 }

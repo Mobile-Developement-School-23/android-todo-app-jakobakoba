@@ -33,4 +33,8 @@ internal class TodoItemsInteractorImpl @Inject constructor(
     override suspend fun getItems(): List<TodoItem> {
         return repository.getList()
     }
+
+    override suspend fun updateItem(item: TodoItem) {
+        repository.updateElement(item)
+    }
 }

@@ -9,10 +9,11 @@ import com.bor96dev.feature.database_api.TodoItemEntity
 internal data class TodoItemData(
     @PrimaryKey val uid: String,
     @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "is_done") val isDone: Boolean,
 )
 
-internal fun TodoItemData.toApi(): TodoItemEntity  {
+internal fun TodoItemData.toApi(): TodoItemEntity {
     return TodoItemEntity(
-        uid, name
+        uid, name, isDone
     )
 }

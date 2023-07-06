@@ -11,8 +11,11 @@ import javax.inject.Inject
 internal class DatabaseRepositoryImpl @Inject constructor(
     private val todoItemDao: TodoItemDao
 ) : DatabaseRepository {
-    override suspend fun addElement(uuid: String, name: String) {
-        val item = TodoItemData(uuid, name)
+    override suspend fun addElement(
+        uuid: String,
+        name: String,
+    ) {
+        val item = TodoItemData(uuid, name, false)
 
         todoItemDao.insert(item)
     }
@@ -23,5 +26,18 @@ internal class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun getItem(id: String): TodoItemEntity {
         return todoItemDao.getItem(id).toApi()
+    }
+
+    override suspend fun deleteItem(id: String) {
+        todoItemDao.deleteItem(id)
+    }
+
+    override suspend fun updateItem(
+        id: String,
+        text: String,
+        priority: String,
+        isDone: Boolean
+    ) {
+        todoItemDao.updateItem(id, text, isDone)
     }
 }

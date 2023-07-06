@@ -9,6 +9,6 @@ internal fun TodoItemEntity.toDomain(): TodoItem {
         id,
         name,
         TodoItemPriority.URGENT,
-        false
+        isDone
     )
 }

@@ -6,4 +6,13 @@ interface DatabaseRepository {
     suspend fun getItems(): List<TodoItemEntity>
 
     suspend fun getItem(id: String): TodoItemEntity
+
+    suspend fun deleteItem(id:String)
+
+    suspend fun updateItem(
+        id: String,
+        text: String,
+        priority: String,
+        isDone: Boolean
+    )
 }

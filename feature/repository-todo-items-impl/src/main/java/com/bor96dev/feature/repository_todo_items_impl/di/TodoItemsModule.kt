@@ -4,6 +4,7 @@ import com.bor96dev.core.di.PerFeature
 import com.bor96dev.feature.repository_todo_items_api.TodoItemsRepository
 import com.bor96dev.feature.repository_todo_items_impl.data.TodoItemsApi
 import com.bor96dev.feature.repository_todo_items_impl.data.TodoItemsRepositoryDatabaseImpl
+import com.bor96dev.feature.repository_todo_items_impl.data.TodoItemsRepositoryImpl
 import com.bor96dev.feature.repository_todo_items_impl.data.request.OkHttpClientBuilder
 import dagger.Module
 import dagger.Provides
@@ -34,5 +35,5 @@ internal class TodoItemsModule {
 
     @PerFeature
     @Provides
-    fun provideRepository(impl: TodoItemsRepositoryDatabaseImpl): TodoItemsRepository = impl
+    fun provideRepository(impl: TodoItemsRepositoryImpl): TodoItemsRepository = impl
 }

@@ -25,10 +25,15 @@ internal class TodoItemsRepositoryDatabaseImpl @Inject constructor(
     }
 
     override suspend fun deleteElement(id: String) {
-
+        databaseRepository.deleteItem(id)
     }
 
     override suspend fun updateElement(todoItem: TodoItem) {
-
+        databaseRepository.updateItem(
+            todoItem.id,
+            todoItem.text,
+            todoItem.priority.toString(),
+            todoItem.isDone
+        )
     }
 }
