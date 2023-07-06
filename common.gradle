@@ -20,7 +20,7 @@ android {
 
 detekt {
     toolVersion = "1.22.0"
-    config = files("config/detekt/detekt.yml")
+    config = files("$rootDir/detekt.yml")
     buildUponDefaultConfig = true
 }
 
