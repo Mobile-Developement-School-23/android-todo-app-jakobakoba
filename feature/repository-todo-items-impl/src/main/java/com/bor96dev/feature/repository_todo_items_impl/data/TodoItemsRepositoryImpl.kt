@@ -1,8 +1,8 @@
 package com.bor96dev.feature.repository_todo_items_impl.data
 
-import android.util.Log
 import com.bor96dev.feature.database_api.DatabaseRepository
 import com.bor96dev.feature.repository_todo_items_api.TodoItemsRepository
+import com.bor96dev.feature.repository_todo_items_impl.InternetChecker
 import com.bor96dev.feature.repository_todo_items_impl.TodoItemData
 import com.bor96dev.feature.repository_todo_items_impl.data.dto.TodoDto
 import com.bor96dev.feature.repository_todo_items_impl.data.mapper.databaseToData
@@ -18,11 +18,16 @@ import javax.inject.Inject
 internal class TodoItemsRepositoryImpl @Inject constructor(
     private val todoItemsApi: TodoItemsApi,
     private val databaseRepository: DatabaseRepository,
+    private val internetChecker: InternetChecker
 ) : TodoItemsRepository {
 
     private var revision = 0L
 
     override suspend fun getList(): List<TodoItem> {
+        if (revision > 0) {
+            syncData()
+        }
+
         val list = try {
             val response = todoItemsApi.getList()
             revision = response.revision
@@ -31,15 +36,15 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
             databaseRepository.getItems().map { it.toDomain() }
         }
 
-        syncData()
-
         return list
     }
 
     private suspend fun syncData() {
-        val networkList = try {
-            todoItemsApi.getList().list.map { it.networkToData() }
-        } catch (e: Exception) {
+        val networkList= if (internetChecker.isInternetAvailable()) {
+            val response = todoItemsApi.getList()
+            revision = response.revision
+            response.list.map { it.networkToData() }
+        } else {
             emptyList()
         }
         val databaseList = databaseRepository.getItems().map { it.databaseToData() }
@@ -74,7 +79,7 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
     override suspend fun addElement(name: String) {
         val uuid = UUID.randomUUID().toString()
 
-        try {
+        if (internetChecker.isInternetAvailable()) {
             val time = System.currentTimeMillis()
 
 
@@ -96,18 +101,18 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
             )
             revision = response.revision
 
-        } catch (e: Exception) {
+        } else {
             databaseRepository.addElement(uuid, name)
         }
 
     }
 
     override suspend fun getElement(id: String): TodoItem {
-        val item = try {
+        val item = if (internetChecker.isInternetAvailable()) {
             val response = todoItemsApi.getElement(id)
             revision = response.revision
             response.element.toDomain()
-        } catch (e: Exception) {
+        } else {
             databaseRepository.getItem(id).toDomain()
         }
 
@@ -117,10 +122,10 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteElement(id: String) {
-        try {
+        if (internetChecker.isInternetAvailable()) {
             val response = todoItemsApi.deleteElement(revision, id)
             revision = response.revision
-        } catch (e: Exception) {
+        } else {
             databaseRepository.deleteItem(id)
         }
     }
@@ -132,7 +137,7 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
 
         val request = AddElementRequest(element)
 
-        try {
+        if (internetChecker.isInternetAvailable()) {
             val response = todoItemsApi.updateElement(
                 revision,
                 element.id,
@@ -140,7 +145,7 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
             )
 
             revision = response.revision
-        } catch (e: Exception) {
+        } else {
             databaseRepository.updateItem(todoItem.id, todoItem.text, todoItem.isDone, changedAt)
         }
     }

@@ -35,7 +35,9 @@ internal class FeaturesDependenciesModule(val context: Context) {
     @PerFeature
     fun provideRepositoryTodoItemsApi(
         databaseApi: DatabaseApi
-    ): RepositoryTodoItemsApi = getRepositoryTodoItemsApi(databaseApi)
+    ): RepositoryTodoItemsApi = getRepositoryTodoItemsApi(databaseApi, object : ContextProvider {
+        override fun context(): Context = context
+    })
 
     @Provides
     @PerFeature
