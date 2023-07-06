@@ -15,4 +15,7 @@ internal interface TodoItemDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(item: TodoItemData)
 
+    @Query("SELECT * FROM todoitemdata WHERE uid = :id")
+    fun getItem(id: String): TodoItemData
+
 }

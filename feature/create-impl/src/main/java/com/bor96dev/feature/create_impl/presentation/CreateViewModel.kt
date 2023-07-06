@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CreateViewModel @Inject constructor(
@@ -23,7 +24,7 @@ class CreateViewModel @Inject constructor(
     fun recreateScreen(id: String) {
         viewModelScope.launch {
             if (id.isNotEmpty()) {
-                val item = todoItemsInteractor.getItem(id)
+                val item = withContext(Dispatchers.IO) { todoItemsInteractor.getItem(id) }
                 _screenState.emit(item)
             }
         }

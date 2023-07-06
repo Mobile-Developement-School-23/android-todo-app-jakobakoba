@@ -20,4 +20,8 @@ internal class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun getItems(): List<TodoItemEntity> {
         return todoItemDao.getList().map { it.toApi() }
     }
+
+    override suspend fun getItem(id: String): TodoItemEntity {
+        return todoItemDao.getItem(id).toApi()
+    }
 }

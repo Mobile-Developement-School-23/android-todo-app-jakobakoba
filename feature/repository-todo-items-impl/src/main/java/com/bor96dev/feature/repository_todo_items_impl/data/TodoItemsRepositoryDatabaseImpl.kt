@@ -21,7 +21,7 @@ internal class TodoItemsRepositoryDatabaseImpl @Inject constructor(
     }
 
     override suspend fun getElement(id: String): TodoItem {
-        return TodoItem.EMPTY
+        return databaseRepository.getItem(id).toDomain()
     }
 
     override suspend fun deleteElement(id: String) {
