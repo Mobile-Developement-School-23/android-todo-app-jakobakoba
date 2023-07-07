@@ -61,8 +61,8 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
                         databaseRepository.addElement(item.id, item.text)
                     }
                 }
-
-                databaseRepository.setRevision(-1)
+                if (response.status == "ok")
+                databaseRepository.setRevision(networkRevision )
             }
         } catch (e: Exception) {
             Log.e("GTA5", "[TodoItemsRepositoryImpl] :${e.message}")
