@@ -1,11 +1,13 @@
 package com.bor96dev.feature.repository_todo_items_impl.data.mapper
 
-import com.bor96dev.feature.database_api.TodoItemEntity
-import com.bor96dev.feature.repository_todo_items_impl.TodoItemData
 import com.bor96dev.feature.repository_todo_items_impl.const.UPDATED_BY
 import com.bor96dev.feature.repository_todo_items_impl.data.dto.TodoDto
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItem
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemPriority
+
+private const val URGENT = "urgent"
+private const val BASIC = "basic"
+private const val LOW = "low"
 
 internal fun TodoDto.toDomain(): TodoItem {
     return TodoItem(
@@ -16,48 +18,31 @@ internal fun TodoDto.toDomain(): TodoItem {
     )
 }
 
-internal fun TodoItemData.toDomain(): TodoItem {
-    return TodoItem(
-        id, name, TodoItemPriority.NORMAL, isDone
-    )
-}
-
-internal fun TodoDto.networkToData(): TodoItemData {
-    return TodoItemData(
-        id,
-        text,
-        done,
-        changed_at
-    )
-}
-
-
-internal fun TodoItemEntity.databaseToData(): TodoItemData {
-    return TodoItemData(
-        id,
-        name,
-        isDone,
-        changedAt
-    )
-}
-
 fun String.priorityToDomain(): TodoItemPriority {
     return when (this) {
-        "low" -> TodoItemPriority.LOW
-        "basic" -> TodoItemPriority.NORMAL
+        LOW -> TodoItemPriority.LOW
+        BASIC -> TodoItemPriority.NORMAL
         else -> TodoItemPriority.URGENT
     }
 }
 
-internal fun TodoItem.toData(changedAt: Long): TodoDto {
+fun TodoItemPriority.toData(): String {
+    return when (this) {
+        TodoItemPriority.URGENT -> URGENT
+        TodoItemPriority.NORMAL -> BASIC
+        else -> LOW
+    }
+}
+
+internal fun TodoItem.toData(): TodoDto {
     return TodoDto(
         id = id,
         done = isDone,
-        importance = "basic",
+        importance = priority.toData(),
         text = text,
         created_at = 0,
         last_updated_by = UPDATED_BY,
-        color = "#FFFFFF",
-        changed_at = changedAt
+            color = "#FFFFFF",
+        changed_at = System.currentTimeMillis()
     )
 }

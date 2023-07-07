@@ -18,10 +18,13 @@ internal interface TodoItemDao {
 
     @Query("SELECT * FROM todoitemdata WHERE uid = :id")
     @Throws(SQLiteException::class)
-    fun getItem(id: String): TodoItemData?
+    fun getItem(id: String): TodoItemData
 
     @Query("DELETE FROM todoitemdata WHERE uid = :id")
     fun deleteItem(id:String)
+
+    @Query("DELETE FROM todoitemdata")
+    fun fullDelete()
 
     @Query(
         "UPDATE todoitemdata " +

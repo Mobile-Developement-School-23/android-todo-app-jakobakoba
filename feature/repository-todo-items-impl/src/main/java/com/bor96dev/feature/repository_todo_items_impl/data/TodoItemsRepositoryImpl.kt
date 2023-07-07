@@ -1,15 +1,12 @@
 package com.bor96dev.feature.repository_todo_items_impl.data
 
+import android.util.Log
 import com.bor96dev.feature.database_api.DatabaseRepository
 import com.bor96dev.feature.repository_todo_items_api.TodoItemsRepository
 import com.bor96dev.feature.repository_todo_items_impl.InternetChecker
-import com.bor96dev.feature.repository_todo_items_impl.TodoItemData
-import com.bor96dev.feature.repository_todo_items_impl.data.dto.TodoDto
-import com.bor96dev.feature.repository_todo_items_impl.data.mapper.databaseToData
-import com.bor96dev.feature.repository_todo_items_impl.data.mapper.networkToData
 import com.bor96dev.feature.repository_todo_items_impl.data.mapper.toData
 import com.bor96dev.feature.repository_todo_items_impl.data.mapper.toDomain
-import com.bor96dev.feature.repository_todo_items_impl.data.response.AddElementRequest
+import com.bor96dev.feature.repository_todo_items_impl.data.response.PatchRequest
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItem
 import java.util.*
 import javax.inject.Inject
@@ -21,132 +18,91 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
     private val internetChecker: InternetChecker
 ) : TodoItemsRepository {
 
-    private var revision = 0L
+    private var networkRevision = 0L
 
     override suspend fun getList(): List<TodoItem> {
-        if (revision > 0) {
-            syncData()
-        }
+        Log.d("GTA5", "BEFORE SYNC databaseRevision : ${databaseRepository.getRevision()}")
+        syncData()
+        val list = databaseRepository.getItems().map { it.toDomain() }
 
-        val list = try {
-            val response = todoItemsApi.getList()
-            revision = response.revision
-            response.list.map { it.toDomain() }
-        } catch (e: Exception) {
-            databaseRepository.getItems().map { it.toDomain() }
-        }
+        Log.d(
+            "GTA5", "ACTUAL : ${list.map { it.text }.convertToText()}\n" +
+                    "networkRevision : $networkRevision\n" +
+                    "databaseRevision : ${databaseRepository.getRevision()}"
+        )
 
         return list
     }
 
     private suspend fun syncData() {
-        val networkList= if (internetChecker.isInternetAvailable()) {
-            val response = todoItemsApi.getList()
-            revision = response.revision
-            response.list.map { it.networkToData() }
-        } else {
-            emptyList()
-        }
-        val databaseList = databaseRepository.getItems().map { it.databaseToData() }
+        try {
+            if (internetChecker.isInternetAvailable()) {
+                val response = todoItemsApi.getList()
+                networkRevision = response.revision
+                val networkList = response.list.map { it.toDomain() }
 
-        val larger = if (networkList.size > databaseList.size) networkList else databaseList
+                val databaseList = databaseRepository.getItems().map { it.toDomain() }
+                val databaseRevision = databaseRepository.getRevision()
 
-        val list = arrayListOf<TodoItemData>()
 
-        for (item in larger) {
-            val first = networkList.firstOrNull { it.id == item.id }
-            val second = databaseList.firstOrNull { it.id == item.id }
+                Log.d(
+                    "GTA5", "networkRevision : ${networkRevision}\n" +
+                            "network : ${networkList.map { it.text }.convertToText()}\n" +
+                            "databaseRevision : ${databaseRevision}\n" +
+                            "database : ${databaseList.map { it.text }.convertToText()}"
+                )
 
-            if ((first?.changedAt ?: -1) > (second?.changedAt ?: -1)) {
-                if (first != null) list.add(first)
-            } else {
-                if (second != null) list.add(second)
+                if (databaseRevision >= networkRevision) {
+                    val list = databaseList.map { it.toData() }
+                    todoItemsApi.patch(networkRevision, PatchRequest(list))
+                } else {
+                    databaseRepository.fullDelete()
+                    for (item in networkList) {
+                        databaseRepository.addElement(item.id, item.text)
+                    }
+                }
+
+                databaseRepository.setRevision(-1)
             }
+        } catch (e: Exception) {
+            Log.e("GTA5", "[TodoItemsRepositoryImpl] :${e.message}")
+        }
+    }
+
+    private fun List<String>.convertToText(): String {
+        var text = ""
+
+        for (item in this) {
+            text += "$item\n"
         }
 
-        for (item in list) {
-            updateElement(item.toDomain())
-
-            databaseRepository.updateItem(
-                item.id,
-                item.name,
-                item.isDone,
-                item.changedAt
-            )
-        }
+        return text
     }
 
     override suspend fun addElement(name: String) {
         val uuid = UUID.randomUUID().toString()
-
-        if (internetChecker.isInternetAvailable()) {
-            val time = System.currentTimeMillis()
-
-
-            val mock = TodoDto.createMock(
-                id = uuid,
-                text = name,
-                created_at = time,
-                changed_at = time
-            )
-
-            val request = AddElementRequest(
-                element = mock,
-
-                )
-
-            val response = todoItemsApi.addElement(
-                revision,
-                request
-            )
-            revision = response.revision
-
-        } else {
-            databaseRepository.addElement(uuid, name)
-        }
-
+        databaseRepository.addElement(uuid, name)
+        databaseRepository.incremeentRevision()
     }
 
     override suspend fun getElement(id: String): TodoItem {
-        val item = if (internetChecker.isInternetAvailable()) {
-            val response = todoItemsApi.getElement(id)
-            revision = response.revision
-            response.element.toDomain()
-        } else {
-            databaseRepository.getItem(id).toDomain()
-        }
-
-
-
+        val item = databaseRepository.getItem(id).toDomain()
+        databaseRepository.incremeentRevision()
         return item
     }
 
     override suspend fun deleteElement(id: String) {
-        if (internetChecker.isInternetAvailable()) {
-            val response = todoItemsApi.deleteElement(revision, id)
-            revision = response.revision
-        } else {
-            databaseRepository.deleteItem(id)
-        }
+        databaseRepository.deleteItem(id)
+        databaseRepository.incremeentRevision()
     }
 
     override suspend fun updateElement(todoItem: TodoItem) {
-        val changedAt = System.currentTimeMillis()
-
-        val element = todoItem.toData(changedAt)
-
-        val request = AddElementRequest(element)
-
-        if (internetChecker.isInternetAvailable()) {
-            val response = todoItemsApi.updateElement(
-                revision,
-                element.id,
-                request
-            )
-
-            revision = response.revision
-        } else {
-            databaseRepository.updateItem(todoItem.id, todoItem.text, todoItem.isDone, changedAt)
-        }
+        databaseRepository.updateItem(
+            todoItem.id,
+            todoItem.text,
+            todoItem.isDone,
+            System.currentTimeMillis()
+        )
+        databaseRepository.incremeentRevision()
     }
 }
