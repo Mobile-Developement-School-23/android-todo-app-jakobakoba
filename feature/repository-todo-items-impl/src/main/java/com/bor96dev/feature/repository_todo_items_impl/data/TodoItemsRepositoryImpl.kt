@@ -61,7 +61,6 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
                         databaseRepository.addElement(item.id, item.text)
                     }
                 }
-                if (response.status == "ok")
                 databaseRepository.setRevision(networkRevision )
             }
         } catch (e: Exception) {
