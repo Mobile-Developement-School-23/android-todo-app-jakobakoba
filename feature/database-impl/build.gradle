@@ -1,0 +1,30 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+apply from: "$rootDir/common.gradle"
+
+android {
+    namespace 'com.bor96dev.feature.database_impl'
+}
+dependencies {
+    implementation(
+            project(':core:di'),
+            project(':feature:database-api'),
+
+            deps.coroutines.coroutines,
+            deps.dagger.dagger,
+            deps.cicerone.cicerone,
+            deps.squareup.retrofit,
+            deps.squareup.converter_moshi,
+            deps.squareup.okhttp,
+            deps.room.room,
+            deps.room.ktx
+    )
+
+    kapt(
+            deps.dagger.compiler,
+            deps.room.compiler
+    )
+}

@@ -14,7 +14,7 @@ internal class TodoItemsInteractorImpl @Inject constructor(
         text: String,
         priority: TodoItemPriority
     ) {
-        repository.addElement(text)
+        repository.addElement(text, priority)
     }
 
     override suspend fun makeIsDone(id: String) {
@@ -32,5 +32,9 @@ internal class TodoItemsInteractorImpl @Inject constructor(
 
     override suspend fun getItems(): List<TodoItem> {
         return repository.getList()
+    }
+
+    override suspend fun updateItem(item: TodoItem) {
+        repository.updateElement(item)
     }
 }

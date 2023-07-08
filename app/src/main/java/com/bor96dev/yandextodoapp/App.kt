@@ -6,6 +6,7 @@ import com.bor96dev.core.di.CoreDependencies
 import com.bor96dev.core.di.FeatureDependency
 import com.bor96dev.core.di.FeatureDependencyProvider
 import com.bor96dev.yandextodoapp.di.DaggerMainComponent
+import com.bor96dev.yandextodoapp.di.FeaturesDependenciesModule
 import com.bor96dev.yandextodoapp.di.MainComponent
 import com.bor96dev.yandextodoapp.di.MainComponentGetter
 
@@ -13,9 +14,15 @@ internal class App : Application(),
     CoreApp,
     MainComponentGetter {
 
-    private val component = DaggerMainComponent.create()
+    private val component: MainComponent by lazy {
+        DaggerMainComponent
+            .builder()
+            .featuresDependenciesModule(FeaturesDependenciesModule((applicationContext)))
+            .build()
+    }
 
     override fun coreDependencies(): CoreDependencies = component
+
 
     override fun featureDependencyProvider(): FeatureDependencyProvider = object : FeatureDependencyProvider {
         override fun featureDependency(): FeatureDependency = component

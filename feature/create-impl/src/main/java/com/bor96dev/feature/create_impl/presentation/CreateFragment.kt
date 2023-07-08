@@ -38,9 +38,9 @@ internal class CreateFragment : Fragment(R.layout.create_fragment) {
     private val binding by viewBinding(CreateFragmentBinding::bind)
 
     @Inject
-    lateinit var viewModelProvider: Provider<CreateViewModel>
+    lateinit var viewModelProvider: CreateViewModel.Factory
 
-    private val viewModel: CreateViewModel by daggerViewModels { viewModelProvider.get() }
+    private val viewModel: CreateViewModel by daggerViewModels { viewModelProvider.create(todoItemId) }
 
     override fun onAttach(context: Context) {
         DaggerCreateComponent.factory()

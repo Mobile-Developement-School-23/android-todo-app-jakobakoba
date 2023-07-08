@@ -14,4 +14,6 @@ interface TodoItemsInteractor {
     suspend fun removeItem(id: String)
 
     suspend fun getItems(): List<TodoItem>
+
+    suspend fun updateItem(item: TodoItem)
 }

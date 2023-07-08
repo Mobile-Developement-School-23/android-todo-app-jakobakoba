@@ -26,10 +26,6 @@ internal class ItemsViewModel @Inject constructor(
     private val _screenState = MutableStateFlow(ItemsState())
     val screenState: StateFlow<ItemsState> = _screenState
 
-    init {
-        updateItems()
-    }
-
     fun onAddButtonClicked() {
         router.navigateTo(object : FragmentScreen {
             override fun createFragment(factory: FragmentFactory): Fragment =
