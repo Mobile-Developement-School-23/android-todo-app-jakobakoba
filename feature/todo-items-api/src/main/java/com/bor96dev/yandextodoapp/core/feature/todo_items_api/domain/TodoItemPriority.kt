@@ -19,9 +19,6 @@ fun String.priorityToDomain(): TodoItemPriority {
 }
 
 fun TodoItemPriority.toData(): String {
-    return when (this) {
-        TodoItemPriority.URGENT -> URGENT
-        TodoItemPriority.NORMAL -> BASIC
-        else -> LOW
-    }
+    // TODO
+    return BASIC
 }

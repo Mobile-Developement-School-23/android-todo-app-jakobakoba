@@ -46,11 +46,9 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
                 val response = todoItemsApi.getList()
                 networkRevision = response.revision
                 val networkList = response.list.map { it.toDomain() }
-            //pause?
                 val databaseList = databaseRepository.getItems().map { it.toDomain() }
                 val databaseRevision = databaseRepository.getRevision()
 
-                //pause?
                 Log.d(
                     "GTA5", "networkRevision : ${networkRevision}\n" +
                             "network : ${networkList.map { it.text }.convertToText()}\n" +
