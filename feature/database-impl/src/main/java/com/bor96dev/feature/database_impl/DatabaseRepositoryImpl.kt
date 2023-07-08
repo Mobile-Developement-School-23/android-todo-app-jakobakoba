@@ -14,9 +14,10 @@ internal class DatabaseRepositoryImpl @Inject constructor(
 ) : DatabaseRepository {
     override suspend fun addElement(
         uuid: String,
+        priority: String,
         name: String,
     ) {
-        val item = TodoItemData(uuid, name, false, System.currentTimeMillis())
+        val item = TodoItemData(uuid, name, priority, false, System.currentTimeMillis())
 
         todoItemDao.insert(item)
     }
@@ -40,10 +41,11 @@ internal class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun updateItem(
         id: String,
         text: String,
+        priority: String,
         isDone: Boolean,
         changedAt: Long
     ) {
-        todoItemDao.updateItem(id, text, isDone, changedAt)
+        todoItemDao.updateItem(id, text, priority, isDone, changedAt)
     }
 
     override suspend fun getRevision(): Long {
@@ -55,7 +57,7 @@ internal class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun incremeentRevision() {
-        val revision =  revisionPref.getRevision() + 1
+        val revision = revisionPref.getRevision() + 1
         revisionPref.updateRevision(revision)
     }
 }

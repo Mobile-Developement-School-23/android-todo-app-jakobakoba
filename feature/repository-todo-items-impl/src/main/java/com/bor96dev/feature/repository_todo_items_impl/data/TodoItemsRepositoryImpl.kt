@@ -8,6 +8,12 @@ import com.bor96dev.feature.repository_todo_items_impl.data.mapper.toData
 import com.bor96dev.feature.repository_todo_items_impl.data.mapper.toDomain
 import com.bor96dev.feature.repository_todo_items_impl.data.response.PatchRequest
 import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItem
+import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.TodoItemPriority
+import com.bor96dev.yandextodoapp.core.feature.todo_items_api.domain.toData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
@@ -40,11 +46,11 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
                 val response = todoItemsApi.getList()
                 networkRevision = response.revision
                 val networkList = response.list.map { it.toDomain() }
-
+            //pause?
                 val databaseList = databaseRepository.getItems().map { it.toDomain() }
                 val databaseRevision = databaseRepository.getRevision()
 
-
+                //pause?
                 Log.d(
                     "GTA5", "networkRevision : ${networkRevision}\n" +
                             "network : ${networkList.map { it.text }.convertToText()}\n" +
@@ -54,14 +60,22 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
 
                 if (databaseRevision >= networkRevision) {
                     val list = databaseList.map { it.toData() }
-                    todoItemsApi.patch(networkRevision, PatchRequest(list))
+
+                    val patchResponse =
+                        todoItemsApi.patch(networkRevision, PatchRequest(list))
+                    networkRevision = patchResponse.revision
                 } else {
                     databaseRepository.fullDelete()
                     for (item in networkList) {
-                        databaseRepository.addElement(item.id, item.text)
+                        databaseRepository.addElement(
+                            item.id,
+                            item.priority.toData(),
+                            item.text
+                        )
                     }
                 }
-                databaseRepository.setRevision(networkRevision )
+                databaseRepository.setRevision(networkRevision)
+
             }
         } catch (e: Exception) {
             Log.e("GTA5", "[TodoItemsRepositoryImpl] :${e.message}")
@@ -78,9 +92,12 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
         return text
     }
 
-    override suspend fun addElement(name: String) {
+    override suspend fun addElement(
+        name: String,
+        priority: TodoItemPriority,
+    ) {
         val uuid = UUID.randomUUID().toString()
-        databaseRepository.addElement(uuid, name)
+        databaseRepository.addElement(uuid, priority.toData(), name)
         databaseRepository.incremeentRevision()
     }
 
@@ -99,6 +116,7 @@ internal class TodoItemsRepositoryImpl @Inject constructor(
         databaseRepository.updateItem(
             todoItem.id,
             todoItem.text,
+            todoItem.priority.toData(),
             todoItem.isDone,
             System.currentTimeMillis()
         )

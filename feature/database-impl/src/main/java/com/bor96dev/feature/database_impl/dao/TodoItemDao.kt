@@ -28,8 +28,8 @@ internal interface TodoItemDao {
 
     @Query(
         "UPDATE todoitemdata " +
-                "SET name = :name, is_done = :isDone, changed_at = :changedAt " +
+                "SET name = :name, is_done = :isDone, priority = :priority, changed_at = :changedAt " +
                 "WHERE uid = :id"
     )
-    fun updateItem(id: String, name: String, isDone: Boolean, changedAt: Long)
+    fun updateItem(id: String, name: String, priority: String, isDone: Boolean, changedAt: Long)
 }
