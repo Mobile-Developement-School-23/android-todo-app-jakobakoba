@@ -10,6 +10,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        compose true
     }
 }
 
@@ -27,8 +28,17 @@ dependencies {
             deps.cicerone.cicerone,
             deps.coroutines.coroutines,
             deps.dagger.dagger,
+            deps.compose.ui,
+            deps.compose.material,
+            deps.compose.material3,
+            deps.compose.ui_tooling_preview,
+            deps.compose.activity,
+            deps.compose.compiler,
     )
     kapt(
             deps.dagger.compiler
+    )
+    debugImplementation(
+            deps.compose.ui_tooling
     )
 }

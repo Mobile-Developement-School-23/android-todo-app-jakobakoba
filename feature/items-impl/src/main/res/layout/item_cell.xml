@@ -5,6 +5,7 @@
     android:id="@+id/itemContainer"
     android:layout_width="match_parent"
     android:layout_height="90dp"
+    style="@style/Theme.AppCompat.DayNight.NoActionBar"
     android:layout_margin="5dp"
     android:focusable="true"
     app:cardCornerRadius="5dp">

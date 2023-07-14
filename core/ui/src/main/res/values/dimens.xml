@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="create_fragment_top_objects_margin_from_top">10dp</dimen>
+</resources>

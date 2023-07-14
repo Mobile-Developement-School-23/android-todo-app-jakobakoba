@@ -3,19 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/back_light_primary">
+    style="@style/Theme.AppCompat.DayNight.NoActionBar"
+    >
 
     <TextView
         android:id="@+id/textMyTasks"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="60dp"
-        android:background="@color/back_light_primary"
         android:gravity="left"
         android:text="@string/my_tasks"
-
         android:textSize="30sp"
-
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +58,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="17dp"
-        android:background="@color/color_light_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -75,7 +72,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/round_fab"
-        android:contentDescription="add task button"
+        android:contentDescription="@string/add_task_button_description"
         android:padding="25dp"
         android:src="@drawable/add_icon"
         app:layout_constraintBottom_toBottomOf="parent"
