@@ -20,7 +20,7 @@ dependencies {
             deps.dagger.dagger,
             deps.cicerone.cicerone,
     )
-    implementation 'androidx.databinding:viewbinding:7.1.2'
+//    implementation 'androidx.databinding:viewbinding:7.1.2'
 
     kapt(
             deps.dagger.compiler

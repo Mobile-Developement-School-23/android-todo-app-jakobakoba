@@ -2,8 +2,13 @@ package com.bor96dev.feature.create_impl.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +27,8 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 internal class CreateFragment : Fragment(R.layout.create_fragment) {
+
+    private lateinit var composeView: ComposeView
 
     companion object {
         private const val ARG_ID = "ARG_ID"
@@ -51,54 +58,69 @@ internal class CreateFragment : Fragment(R.layout.create_fragment) {
             .inject(this)
         super.onAttach(context)
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        return ComposeView(requireContext()).also{
+            composeView = it
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        with(binding) {
-            closeButton.setOnClickListener {
-                viewModel.onExitButtonClicked()
-            }
-            saveButton.setOnClickListener {
-                val text = editText.text.toString()
-                val priority = getPriorityList()[spinner.selectedItemPosition].id
-
-                viewModel.onSaveButtonClicked(text, priority)
-            }
-            deleteButton.apply {
-                isEnabled = todoItemId.isNotEmpty()
-                setOnClickListener {
-                    viewModel.removeItemButtonClicked(todoItemId)
-                }
-            }
+        composeView.setContent {
+            val state by viewModel.state.collectAsState()
+            CreateScreen(state = state)
         }
 
-        val adapter = ArrayAdapter(
-            requireContext(),
-            R.layout.spinner_item,
-            getPriorityList().map { requireContext().getString(it.textId) }
-        )
-        binding.spinner.adapter = adapter
-        binding.spinner.setSelection(1)
-
-        screenRecreate()
-
-        viewModel.recreateScreen(todoItemId)
+//        with(binding) {
+//            closeButton.setOnClickListener {
+//                viewModel.onExitButtonClicked()
+//            }
+//            saveButton.setOnClickListener {
+//                val text = editText.text.toString()
+//                val priority = getPriorityList()[spinner.selectedItemPosition].id
+//
+//                viewModel.onSaveButtonClicked(text, priority)
+//            }
+//            deleteButton.apply {
+//                isEnabled = todoItemId.isNotEmpty()
+//                setOnClickListener {
+//                    viewModel.removeItemButtonClicked(todoItemId)
+//                }
+//            }
+//        }
+//
+//        val adapter = ArrayAdapter(
+//            requireContext(),
+//            R.layout.spinner_item,
+//            getPriorityList().map { requireContext().getString(it.textId) }
+//        )
+//        binding.spinner.adapter = adapter
+//        binding.spinner.setSelection(1)
+//
+//        screenRecreate()
+//
+//        viewModel.recreateScreen(todoItemId)
     }
 
-    private fun screenRecreate() {
-        lifecycleScope.launch {
-            viewModel.state.collectLatest { item ->
-                with(binding) {
-                    editText.setText(item.text)
-                    spinner.setSelection(
-                        when (item.priority) {
-                            TodoItemPriority.LOW -> 0
-                            TodoItemPriority.NORMAL -> 1
-                            else -> 2
-                        }
-                    )
-                }
-            }
-        }
-    }
+//    private fun screenRecreate() {
+//        lifecycleScope.launch {
+//            viewModel.state.collectLatest { item ->
+//                with(binding) {
+//                    editText.setText(item.text)
+//                    spinner.setSelection(
+//                        when (item.priority) {
+//                            TodoItemPriority.LOW -> 0
+//                            TodoItemPriority.NORMAL -> 1
+//                            else -> 2
+//                        }
+//                    )
+//                }
+//            }
+//        }
+//    }
 }

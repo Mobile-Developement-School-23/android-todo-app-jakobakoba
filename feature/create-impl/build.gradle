@@ -9,8 +9,11 @@ android {
     namespace 'com.bor96dev.yandextodoapp.core.feature.create_impl'
 
     buildFeatures {
-        viewBinding true
         compose true
+        viewBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion rootProject.ext.kotlinCompiler
     }
 }
 
@@ -33,7 +36,6 @@ dependencies {
             deps.compose.material3,
             deps.compose.ui_tooling_preview,
             deps.compose.activity,
-            deps.compose.compiler,
     )
     kapt(
             deps.dagger.compiler

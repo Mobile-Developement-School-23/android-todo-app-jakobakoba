@@ -25,11 +25,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+
     }
+//    composeOptions {
+//        kotlinCompilerExtensionVersion = "1.4.8"
+//    }
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
 }
 
@@ -53,6 +57,12 @@ dependencies {
             deps.coroutines.coroutines,
             deps.cicerone.cicerone,
             deps.dagger.dagger,
+            deps.compose.activity,
+            deps.compose.ui,
+            deps.compose.material,
+            deps.compose.material3,
+            deps.compose.ui_tooling_preview,
+
     )
     kapt(
             deps.dagger.compiler

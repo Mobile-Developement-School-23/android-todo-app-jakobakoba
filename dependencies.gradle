@@ -81,7 +81,6 @@ compose.runtime = "androidx.compose.runtime:runtime:$versions.compose"
 compose.ui = "androidx.compose.ui:ui:$versions.compose"
 compose.ui_tooling =  "androidx.compose.ui:ui-tooling:$versions.compose"
 compose.ui_tooling_preview = "androidx.compose.ui:ui-tooling-preview:$versions.compose"
-compose.compiler = "androidx.compose.compiler:compiler:$versions.compose"
 deps.compose = compose
 
 def room = [:]
